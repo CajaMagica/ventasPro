@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mi Arte Bolivia – Panel CMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0f0d0a;--surface:#1a1612;--card:#231f1a;--border:#2e2922;--cream:#f5f0e8;--sand:#c9b99a;--clay:#b87c5a;--rust:#c4572a;--teal:#4a9b8e;--text:#e8ddd0;--muted:#7a6f62;--radius:12px;--sidebar:260px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100%;display:flex;flex-direction:column}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:inherit}
+input,textarea,select{font-family:inherit}
+#login-screen{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,#0f0d0a,#1a1612);display:flex;align-items:center;justify-content:center}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3rem 2.5rem;width:min(420px,90vw);box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.login-logo{text-align:center;margin-bottom:2rem}
+.login-logo .butterfly{font-size:2.5rem;display:block;margin-bottom:.5rem}
+.login-logo h1{font-family:'Playfair Display',serif;font-size:2rem;color:var(--cream)}
+.login-logo p{color:var(--muted);font-size:.85rem;margin-top:.3rem}
+.field{margin-bottom:1.2rem}
+.field label{display:block;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.field input{width:100%;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.95rem;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--teal)}
+.sb-config{background:rgba(74,155,142,.06);border:1px solid rgba(74,155,142,.2);border-radius:12px;padding:1.2rem;margin-bottom:1.5rem}
+.sb-config-title{font-size:.72rem;color:var(--teal);margin-bottom:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:.4rem}
+.sb-config .field{margin-bottom:.7rem}
+.sb-config .field:last-child{margin-bottom:0}
+.btn-login{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--rust),var(--clay));color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:600;transition:opacity .2s,transform .2s;margin-top:.5rem}
+.btn-login:hover{opacity:.9;transform:translateY(-1px)}
+.login-error{color:#e06060;font-size:.82rem;text-align:center;margin-top:.8rem;display:none}
+.login-hint{color:var(--muted);font-size:.72rem;text-align:center;margin-top:1rem;line-height:1.6}
+.login-hint a{color:var(--teal)}
+#cms{display:none;min-height:100vh;flex-direction:row}
+#cms.visible{display:flex}
+aside{width:var(--sidebar);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:1.5rem 1.3rem 1rem;border-bottom:1px solid var(--border)}
+.sidebar-logo h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--cream);display:flex;align-items:center;gap:.4rem}
+.sidebar-logo p{font-size:.72rem;color:var(--muted);margin-top:.2rem}
+.sb-badge{display:inline-flex;align-items:center;gap:.3rem;background:rgba(74,155,142,.15);color:var(--teal);font-size:.65rem;font-weight:700;padding:.2rem .5rem;border-radius:50px;margin-top:.4rem}
+nav.cms-nav{padding:.8rem 0;flex:1}
+.nav-group{margin-bottom:.3rem}
+.nav-group-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding:.6rem 1.3rem .3rem}
+.nav-item{display:flex;align-items:center;gap:.6rem;padding:.62rem 1.3rem;font-size:.88rem;color:var(--sand);cursor:pointer;border-left:3px solid transparent;transition:background .15s,color .15s,border-color .15s}
+.nav-item:hover{background:var(--card);color:var(--cream)}
+.nav-item.active{background:rgba(196,87,42,.12);border-left-color:var(--rust);color:var(--cream);font-weight:500}
+.nav-item .icon{font-size:1rem;width:20px;text-align:center}
+.sidebar-bottom{padding:1rem 1.3rem;border-top:1px solid var(--border)}
+.user-chip{display:flex;align-items:center;gap:.7rem;background:var(--card);border-radius:10px;padding:.7rem .9rem}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--rust),var(--clay));display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:#fff;flex-shrink:0}
+.user-info p{font-size:.82rem;color:var(--cream);font-weight:500}
+.user-info span{font-size:.72rem;color:var(--muted)}
+.btn-logout{width:100%;margin-top:.8rem;padding:.5rem;background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:.8rem;transition:border-color .2s,color .2s}
+.btn-logout:hover{border-color:var(--rust);color:var(--rust)}
+main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar h1{font-size:1.1rem;font-weight:600;color:var(--cream)}
+.topbar-actions{display:flex;gap:.7rem;align-items:center}
+.btn-preview{padding:.5rem 1.1rem;background:none;border:1px solid var(--border);border-radius:8px;color:var(--sand);font-size:.82rem;transition:border-color .2s,color .2s;display:flex;gap:.4rem;align-items:center}
+.btn-preview:hover{border-color:var(--teal);color:var(--teal)}
+.btn-save{padding:.5rem 1.3rem;background:linear-gradient(135deg,var(--teal),#3a8578);border:none;border-radius:8px;color:#fff;font-size:.82rem;font-weight:600;transition:opacity .2s,transform .2s;display:flex;gap:.4rem;align-items:center}
+.btn-save:hover{opacity:.88;transform:translateY(-1px)}
+.content{padding:2rem;flex:1}
+.panel{display:none}
+.panel.active{display:block}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.5rem}
+.stat-icon{font-size:1.4rem;margin-bottom:.5rem}
+.stat-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+.stat-val{font-size:1.9rem;font-weight:600;color:var(--cream);line-height:1}
+.activity-list{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.activity-list h3{padding:1rem 1.3rem;font-size:.88rem;font-weight:600;border-bottom:1px solid var(--border);color:var(--cream)}
+.activity-item{display:flex;align-items:flex-start;gap:.8rem;padding:.75rem 1.3rem;border-bottom:1px solid var(--border);font-size:.83rem}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:.3rem}
+.activity-text{color:var(--sand);flex:1;line-height:1.5}
+/* ORDERS */
+.order-row{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.3rem;margin-bottom:.8rem}
+.order-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem}
+.order-id{font-family:monospace;font-size:.75rem;color:var(--muted)}
+.order-date{font-size:.75rem;color:var(--muted)}
+.order-total{font-weight:700;color:var(--rust)}
+.order-items{font-size:.8rem;color:var(--sand);line-height:1.7;margin:.4rem 0}
+.order-status{display:flex;align-items:center;gap:.5rem;margin-top:.6rem}
+.status-select{background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:.3rem .6rem;font-size:.78rem;outline:none}
+.s-badge{display:inline-flex;padding:.18rem .55rem;border-radius:50px;font-size:.7rem;font-weight:600}
+.s-pending{background:rgba(201,185,154,.15);color:var(--sand)}
+.s-confirmed{background:rgba(74,155,142,.18);color:var(--teal)}
+.s-shipped{background:rgba(120,140,90,.15);color:#7a8c5a}
+.s-done{background:rgba(74,155,142,.25);color:var(--teal)}
+.s-cancelled{background:rgba(224,96,96,.12);color:#e06060}
+/* FORMS */
+.section-block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1.5rem;overflow:hidden}
+.section-block-header{padding:1rem 1.3rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.section-block-header h3{font-size:.95rem;font-weight:600;color:var(--cream)}
+.section-block-body{padding:1.3rem}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.field-row.single{grid-template-columns:1fr}
+.cms-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:.35rem}
+.cms-input{width:100%;padding:.65rem .9rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.88rem;outline:none;transition:border-color .2s}
+.cms-input:focus{border-color:var(--teal)}
+textarea.cms-input{resize:vertical;min-height:90px;line-height:1.6}
+.cms-select{width:100%;padding:.65rem .9rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.88rem;outline:none}
+/* IMAGE UPLOAD */
+.img-upload-area{border:2px dashed var(--border);border-radius:10px;padding:1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;background:var(--surface)}
+.img-upload-area:hover{border-color:var(--teal);background:rgba(74,155,142,.05)}
+.img-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:2rem;margin-bottom:.5rem}
+.img-upload-area p{font-size:.78rem;color:var(--muted)}
+.img-name{font-size:.75rem;color:var(--teal);margin-top:.3rem;font-weight:500}
+.img-preview-wrap{position:relative;margin-top:.8rem;display:none}
+.img-preview-wrap img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+.remove-img{position:absolute;top:.4rem;right:.4rem;background:rgba(0,0,0,.7);border:none;border-radius:50%;width:26px;height:26px;color:#fff;font-size:.8rem;display:flex;align-items:center;justify-content:center;cursor:pointer}
+/* TABLE */
+.table-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;gap:1rem;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:.5rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem;flex:1;max-width:300px}
+.search-box input{background:none;border:none;color:var(--text);outline:none;font-size:.88rem;flex:1}
+.btn-add{padding:.55rem 1.2rem;background:linear-gradient(135deg,var(--rust),var(--clay));border:none;border-radius:8px;color:#fff;font-size:.83rem;font-weight:600;display:flex;align-items:center;gap:.4rem}
+.btn-add:hover{opacity:.88}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{text-align:left;padding:.7rem 1rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:500}
+.data-table td{padding:.85rem 1rem;font-size:.86rem;border-bottom:1px solid var(--border);color:var(--sand);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:rgba(255,255,255,.02)}
+.prod-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.prod-thumb-wrap{display:flex;align-items:center;gap:.8rem}
+.prod-name-col{color:var(--cream);font-weight:500}
+.tbadge{display:inline-block;padding:.2rem .6rem;border-radius:50px;font-size:.7rem;font-weight:600}
+.badge-active{background:rgba(74,155,142,.18);color:var(--teal)}
+.badge-draft{background:rgba(201,185,154,.12);color:var(--sand)}
+.badge-feat{background:rgba(196,87,42,.18);color:var(--rust)}
+.sku-pill{font-family:monospace;font-size:.75rem;background:rgba(74,155,142,.12);color:var(--teal);padding:.2rem .5rem;border-radius:6px;white-space:nowrap}
+.action-btns{display:flex;gap:.4rem}
+.btn-edit,.btn-del{padding:.35rem .7rem;border-radius:6px;border:1px solid var(--border);font-size:.75rem;transition:border-color .2s,color .2s;background:none}
+.btn-edit{color:var(--teal)}.btn-edit:hover{border-color:var(--teal)}
+.btn-del{color:#e06060}.btn-del:hover{border-color:#e06060}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;width:min(680px,100%);max-height:90vh;overflow-y:auto;animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-header{padding:1.3rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--card);z-index:2}
+.modal-header h3{font-size:1rem;font-weight:600;color:var(--cream)}
+.modal-close{background:none;border:none;color:var(--muted);font-size:1.3rem;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.modal-body{padding:1.5rem}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.7rem;position:sticky;bottom:0;background:var(--card)}
+.btn-cancel{padding:.6rem 1.3rem;background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:.85rem}
+.btn-confirm{padding:.6rem 1.5rem;background:linear-gradient(135deg,var(--teal),#3a8578);border:none;border-radius:8px;color:#fff;font-size:.85rem;font-weight:600}
+/* CATEGORIES */
+.cat-grid-admin{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.cat-card-admin{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.cat-img{height:100px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden;position:relative}
+.cat-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cat-body{padding:.9rem}
+.cat-name-input{width:100%;background:none;border:none;border-bottom:1px solid var(--border);color:var(--cream);font-size:.9rem;font-weight:600;outline:none;padding-bottom:.3rem;margin-bottom:.6rem}
+.cat-upload-btn{font-size:.72rem;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.35rem .7rem;color:var(--sand);cursor:pointer;position:relative;display:inline-block;overflow:hidden}
+.cat-upload-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+/* LOADING */
+.loading-overlay{position:fixed;inset:0;z-index:800;background:rgba(15,13,10,.82);display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem}
+.loading-overlay.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay p{color:var(--sand);font-size:.88rem}
+/* TOAST */
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;background:var(--teal);color:#fff;padding:.7rem 1.4rem;border-radius:10px;font-size:.85rem;font-weight:600;transform:translateY(20px);opacity:0;transition:transform .3s,opacity .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading-overlay">
+  <div class="spinner"></div>
+  <p id="loading-msg">Conectando con Supabase…</p>
+</div>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <span class="butterfly">🦋</span>
+      <h1>Mi Arte Bolivia</h1>
+      <p>Panel de Administración</p>
+    </div>
+    <div class="sb-config">
+      <div class="sb-config-title">🔗 Configuración Supabase</div>
+      <div class="field"><label>Project URL</label><input type="text" id="sb-url" placeholder="https://xxxx.supabase.co"/></div>
+      <div class="field"><label>Anon Key (public)</label><input type="text" id="sb-anon" placeholder="eyJhbGciOiJIUzI1NiIs…"/></div>
+    </div>
+    <div class="field"><label>Usuario</label><input type="text" id="user-input" placeholder="admin"/></div>
+    <div class="field"><label>Contraseña</label><input type="password" id="pass-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="btn-login" onclick="doLogin()">Ingresar al CMS</button>
+    <p class="login-error" id="login-err">Credenciales o conexión incorrecta</p>
+    <p class="login-hint">
+      Demo: <strong>admin / miarte2025</strong><br>
+      URL y Anon Key: <a href="https://supabase.com/dashboard" target="_blank">supabase.com/dashboard</a> → Project Settings → API
+    </p>
+  </div>
+</div>
+
+<div id="cms">
+  <aside>
+    <div class="sidebar-logo">
+      <h2>🦋 Mi Arte</h2>
+      <p>Content Manager</p>
+      <div class="sb-badge">⚡ Supabase</div>
+    </div>
+    <nav class="cms-nav">
+      <div class="nav-group">
+        <div class="nav-group-title">General</div>
+        <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="icon">📊</span>Dashboard</div>
+        <div class="nav-item" onclick="showPanel('orders',this)"><span class="icon">📦</span>Pedidos</div>
+        <div class="nav-item" onclick="showPanel('site-config',this)"><span class="icon">🌐</span>Configuración</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">Secciones</div>
+        <div class="nav-item" onclick="showPanel('hero',this)"><span class="icon">🖼</span>Hero / Portada</div>
+        <div class="nav-item" onclick="showPanel('announcement',this)"><span class="icon">📢</span>Barra de Anuncio</div>
+        <div class="nav-item" onclick="showPanel('mid-banner',this)"><span class="icon">🎯</span>Banner Intermedio</div>
+        <div class="nav-item" onclick="showPanel('about',this)"><span class="icon">💛</span>Nosotros</div>
+        <div class="nav-item" onclick="showPanel('contact',this)"><span class="icon">📞</span>Contacto</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">Catálogo</div>
+        <div class="nav-item" onclick="showPanel('products',this)"><span class="icon">🛍</span>Productos</div>
+        <div class="nav-item" onclick="showPanel('categories',this)"><span class="icon">📂</span>Categorías</div>
+        <div class="nav-item" onclick="showPanel('gallery',this)"><span class="icon">📷</span>Galería</div>
+      </div>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="user-chip">
+        <div class="user-avatar">A</div>
+        <div class="user-info"><p>Administrador</p><span id="sb-url-label">—</span></div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">↩ Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <h1 id="topbar-title">Dashboard</h1>
+      <div class="topbar-actions">
+        <button class="btn-preview" onclick="window.open('index.html','_blank')">👁 Ver sitio</button>
+        <button class="btn-save" onclick="saveAll()">💾 Guardar cambios</button>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div id="panel-dashboard" class="panel active">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon">🛍</div><div class="stat-label">Productos</div><div class="stat-val" id="stat-products">—</div></div>
+          <div class="stat-card"><div class="stat-icon">📂</div><div class="stat-label">Categorías</div><div class="stat-val" id="stat-cats">—</div></div>
+          <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-label">Pedidos</div><div class="stat-val" id="stat-orders">—</div></div>
+          <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-label">Guardado</div><div class="stat-val" style="font-size:1rem;padding-top:.3rem" id="stat-saved">—</div></div>
+        </div>
+        <div class="activity-list">
+          <h3>⚡ Cómo funciona con Supabase</h3>
+          <div class="activity-item"><div class="activity-dot"></div><div class="activity-text">Los productos, imágenes y configuración se guardan en <strong>Supabase</strong> — todos los clientes ven el mismo catálogo en tiempo real desde cualquier dispositivo</div></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--rust)"></div><div class="activity-text">Imágenes almacenadas en <strong>Supabase Storage</strong> (bucket público "miarte") — sin límite práctico de tamaño</div></div>
+          <div class="activity-item"><div class="activity-dot" style="background:#7a8c5a"></div><div class="activity-text">El <strong>carrito de cada cliente es independiente</strong> — cada visitante tiene su propia sesión y no ve el carrito de otros</div></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--sand)"></div><div class="activity-text">Los pedidos que hacen los clientes aparecen en la sección <strong>Pedidos</strong> con su detalle completo y SKUs</div></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--teal)"></div><div class="activity-text">Presiona <strong>💾 Guardar cambios</strong> para que los textos editados se actualicen en el sitio público inmediatamente</div></div>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div id="panel-orders" class="panel">
+        <div class="table-toolbar">
+          <span style="color:var(--muted);font-size:.85rem">Pedidos recibidos de clientes</span>
+          <button class="btn-preview" onclick="loadAndRenderOrders()" style="margin:0">🔄 Actualizar</button>
+        </div>
+        <div id="orders-list"><p style="color:var(--muted);text-align:center;padding:2rem;font-size:.85rem">Cargando pedidos…</p></div>
+      </div>
+
+      <!-- SITE CONFIG -->
+      <div id="panel-site-config" class="panel">
+        <div class="section-block">
+          <div class="section-block-header"><h3>🌐 Información General</h3></div>
+          <div class="section-block-body">
+            <div class="field-row">
+              <div><label class="cms-label">Nombre</label><input class="cms-input" id="cfg-name" placeholder="Mi Arte Bolivia"/></div>
+              <div><label class="cms-label">WhatsApp</label><input class="cms-input" id="cfg-phone" placeholder="59176852054"/></div>
+            </div>
+            <div class="field-row">
+              <div><label class="cms-label">Facebook</label><input class="cms-input" id="cfg-facebook" placeholder="MiArteBolivia"/></div>
+              <div><label class="cms-label">Instagram</label><input class="cms-input" id="cfg-instagram" placeholder="MiArteBolivia"/></div>
+            </div>
+            <div class="field-row">
+              <div><label class="cms-label">Ciudad</label><input class="cms-input" id="cfg-city" placeholder="La Paz, Bolivia"/></div>
+              <div><label class="cms-label">Moneda</label><input class="cms-input" id="cfg-currency" placeholder="Bs."/></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="section-block-header"><h3>🏷 Logo</h3></div>
+          <div class="section-block-body">
+            <div class="img-upload-area">
+              <input type="file" accept="image/*" onchange="uploadSectionImg(this,'logo','logo-pw','logo-pi','logo-in')"/>
+              <div class="upload-icon">🏷</div><div>Clic para subir logo</div><p>PNG ideal · 200×80px</p>
+              <div class="img-name" id="logo-in"></div>
+            </div>
+            <div class="img-preview-wrap" id="logo-pw"><img id="logo-pi" src="" alt=""/><button class="remove-img" onclick="removeSectionImg('logo','logo-pw','logo-in')">✕</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div id="panel-hero" class="panel">
+        <div class="section-block">
+          <div class="section-block-header"><h3>🖼 Imagen Hero</h3></div>
+          <div class="section-block-body">
+            <div class="img-upload-area">
+              <input type="file" accept="image/*" onchange="uploadSectionImg(this,'hero','hero-pw','hero-pi','hero-in')"/>
+              <div class="upload-icon">🖼</div><div>Clic para subir imagen</div><p>Recomendado: 1400×900px</p>
+              <div class="img-name" id="hero-in"></div>
+            </div>
+            <div class="img-preview-wrap" id="hero-pw"><img id="hero-pi" src="" alt=""/><button class="remove-img" onclick="removeSectionImg('hero','hero-pw','hero-in')">✕</button></div>
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="section-block-header"><h3>✏️ Textos</h3></div>
+          <div class="section-block-body">
+            <div class="field-row single"><div><label class="cms-label">Eyebrow</label><input class="cms-input" id="hero-eyebrow"/></div></div>
+            <div class="field-row single"><div><label class="cms-label">Título</label><input class="cms-input" id="hero-title"/></div></div>
+            <div class="field-row single"><div><label class="cms-label">Descripción</label><textarea class="cms-input" id="hero-desc"></textarea></div></div>
+            <div class="field-row">
+              <div><label class="cms-label">Botón 1</label><input class="cms-input" id="hero-btn1"/></div>
+              <div><label class="cms-label">Botón 2</label><input class="cms-input" id="hero-btn2"/></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANNOUNCEMENT -->
+      <div id="panel-announcement" class="panel">
+        <div class="section-block">
+          <div class="section-block-header"><h3>📢 Barra de Anuncio</h3></div>
+          <div class="section-block-body">
+            <div class="field-row single"><div><label class="cms-label">Texto</label><input class="cms-input" id="announce-text"/></div></div>
+            <div class="field-row">
+              <div><label class="cms-label">Fondo</label><input type="color" id="announce-bg" value="#2c2416" style="height:42px;width:100%;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer"/></div>
+              <div><label class="cms-label">Texto</label><input type="color" id="announce-color" value="#f5f0e8" style="height:42px;width:100%;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer"/></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MID BANNER -->
+      <div id="panel-mid-banner" class="panel">
+        <div class="section-block">
+          <div class="section-block-header"><h3>🎯 Imagen Banner</h3></div>
+          <div class="section-block-body">
+            <div class="img-upload-area">
+              <input type="file" accept="image/*" onchange="uploadSectionImg(this,'mid_banner','banner-pw','banner-pi','banner-in')"/>
+              <div class="upload-icon">🎯</div><div>Clic para subir imagen</div><p>Recomendado: 1400×500px</p>
+              <div class="img-name" id="banner-in"></div>
+            </div>
+            <div class="img-preview-wrap" id="banner-pw"><img id="banner-pi" src="" alt=""/><button class="remove-img" onclick="removeSectionImg('mid_banner','banner-pw','banner-in')">✕</button></div>
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="section-block-header"><h3>✏️ Textos</h3></div>
+          <div class="section-block-body">
+            <div class="field-row single"><div><label class="cms-label">Título</label><input class="cms-input" id="banner-title"/></div></div>
+            <div class="field-row single"><div><label class="cms-label">Subtítulo</label><textarea class="cms-input" id="banner-sub"></textarea></div></div>
+            <div class="field-row single"><div><label class="cms-label">Botón</label><input class="cms-input" id="banner-btn"/></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT -->
+      <div id="panel-about" class="panel">
+        <div class="section-block">
+          <div class="section-block-header"><h3>💛 Imagen</h3></div>
+          <div class="section-block-body">
+            <div class="img-upload-area">
+              <input type="file" accept="image/*" onchange="uploadSectionImg(this,'about','about-pw','about-pi','about-in')"/>
+              <div class="upload-icon">📸</div><div>Clic para subir foto</div><p>Recomendado: 700×500px</p>
+              <div class="img-name" id="about-in"></div>
+            </div>
+            <div class="img-preview-wrap" id="about-pw"><img id="about-pi" src="" alt=""/><button class="remove-img" onclick="removeSectionImg('about','about-pw','about-in')">✕</button></div>
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="section-block-header"><h3>✏️ Textos</h3></div>
+          <div class="section-block-body">
+            <div class="field-row single"><div><label class="cms-label">Título</label><input class="cms-input" id="about-title"/></div></div>
+            <div class="field-row single"><div><label class="cms-label">Párrafo 1</label><textarea class="cms-input" id="about-p1"></textarea></div></div>
+            <div class="field-row single"><div><label class="cms-label">Párrafo 2</label><textarea class="cms-input" id="about-p2"></textarea></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div id="panel-contact" class="panel">
+        <div class="section-block">
+          <div class="section-block-header"><h3>📞 Contacto</h3></div>
+          <div class="section-block-body">
+            <div class="field-row single"><div><label class="cms-label">Título</label><input class="cms-input" id="contact-title"/></div></div>
+            <div class="field-row single"><div><label class="cms-label">Descripción</label><textarea class="cms-input" id="contact-desc"></textarea></div></div>
+            <div class="field-row">
+              <div><label class="cms-label">Número WhatsApp</label><input class="cms-input" id="contact-wa" placeholder="59176852054"/></div>
+              <div><label class="cms-label">Texto botón WA</label><input class="cms-input" id="contact-wa-btn"/></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div id="panel-products" class="panel">
+        <div class="table-toolbar">
+          <div class="search-box"><span>🔍</span><input placeholder="Buscar por nombre o SKU…" oninput="filterProducts(this.value)"/></div>
+          <button class="btn-add" onclick="openProductModal()">+ Nuevo producto</button>
+        </div>
+        <div class="section-block" style="overflow:auto">
+          <table class="data-table">
+            <thead><tr><th>Producto</th><th>SKU</th><th>Categoría</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="products-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CATEGORIES -->
+      <div id="panel-categories" class="panel">
+        <div class="table-toolbar">
+          <span style="color:var(--muted);font-size:.85rem">Nombre e imagen de cada categoría</span>
+          <button class="btn-add" onclick="addCategory()">+ Nueva categoría</button>
+        </div>
+        <div class="cat-grid-admin" id="cat-grid-admin"></div>
+      </div>
+
+      <!-- GALLERY -->
+      <div id="panel-gallery" class="panel">
+        <div class="table-toolbar">
+          <span style="color:var(--muted);font-size:.85rem">Fotos para la sección galería</span>
+          <button class="btn-add" onclick="addGallerySlot()">+ Agregar foto</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem" id="gallery-admin-grid"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-bg" id="product-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Nuevo Producto</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-row">
+        <div style="flex:2"><label class="cms-label">Nombre</label><input class="cms-input" id="m-name" placeholder="Cuadro de Flores Prensadas"/></div>
+        <div><label class="cms-label">SKU <span style="color:var(--teal);font-size:.68rem">(auto si vacío)</span></label><input class="cms-input" id="m-sku" placeholder="MA-007" style="font-family:monospace"/></div>
+      </div>
+      <div class="field-row single"><div><label class="cms-label">Descripción</label><textarea class="cms-input" id="m-desc" style="min-height:70px"></textarea></div></div>
+      <div class="field-row">
+        <div><label class="cms-label">Precio</label><input class="cms-input" id="m-price" placeholder="Bs. 150"/></div>
+        <div><label class="cms-label">Categoría</label><select class="cms-select cms-input" id="m-cat"><option value="">Sin categoría</option></select></div>
+      </div>
+      <div class="field-row">
+        <div><label class="cms-label">Estado</label><select class="cms-select cms-input" id="m-status"><option value="active">Activo</option><option value="draft">Borrador</option></select></div>
+        <div><label class="cms-label">Badge</label><input class="cms-input" id="m-badge" placeholder="Nuevo / Popular / Oferta"/></div>
+      </div>
+      <div><label class="cms-label" style="margin-bottom:.5rem;display:block">Imagen del producto</label>
+        <div class="img-upload-area" id="m-img-area">
+          <input type="file" accept="image/*" onchange="handleProductImg(this)"/>
+          <div class="upload-icon">🛍</div><div>Clic para subir imagen</div><p>Cuadrada ideal · JPG/PNG/WEBP</p>
+          <div class="img-name" id="m-img-name"></div>
+        </div>
+        <div class="img-preview-wrap" id="m-img-wrap">
+          <img id="m-img-preview" src="" alt=""/>
+          <button class="remove-img" onclick="clearProductImg()">✕</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="saveProduct()">Guardar producto</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// SUPABASE REST CLIENT
+// ═══════════════════════════════════════════════════════════
+const ADMIN_USER='admin', ADMIN_PASS='miarte2025';
+let SB_URL='', SB_ANON='';
+
+function sbH(extra={}){
+  return{'apikey':SB_ANON,'Authorization':'Bearer '+SB_ANON,'Content-Type':'application/json','Prefer':'return=representation',...extra};
+}
+async function sbSelect(table,qs=''){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${qs}&order=sort_order`,{headers:sbH()});
+  if(!r.ok)throw new Error(await r.text());
+  return r.json();
+}
+async function sbUpsert(table,data){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}`,{
+    method:'POST',headers:sbH({'Prefer':'resolution=merge-duplicates,return=representation'}),
+    body:JSON.stringify(data)
+  });
+  if(!r.ok)throw new Error(await r.text());
+  return r.status===204?[]:r.json();
+}
+async function sbUpdate(table,id,data,col='id'){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${col}=eq.${encodeURIComponent(id)}`,{
+    method:'PATCH',headers:sbH(),body:JSON.stringify(data)
+  });
+  if(!r.ok)throw new Error(await r.text());
+}
+async function sbDelete(table,id,col='id'){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${col}=eq.${encodeURIComponent(id)}`,{
+    method:'DELETE',headers:sbH()
+  });
+  if(!r.ok)throw new Error(await r.text());
+}
+async function sbUpload(path,file){
+  const r=await fetch(`${SB_URL}/storage/v1/object/miarte/${path}`,{
+    method:'POST',
+    headers:{'Authorization':'Bearer '+SB_ANON,'x-upsert':'true'},
+    body:file
+  });
+  if(!r.ok)throw new Error(await r.text());
+  return `${SB_URL}/storage/v1/object/public/miarte/${path}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════
+async function doLogin(){
+  const u=g('user-input'),p=g('pass-input');
+  const url=g('sb-url').replace(/\/+$/,''), anon=g('sb-anon').trim();
+  if(!url||!anon){toast('⚠️ Ingresa URL y Anon Key de Supabase',true);return;}
+  if(u!==ADMIN_USER||p!==ADMIN_PASS){document.getElementById('login-err').style.display='block';return;}
+  SB_URL=url;SB_ANON=anon;
+  localStorage.setItem('sb_url',url);localStorage.setItem('sb_anon',anon);
+  showLoad('Conectando…');
+  try{
+    await fetch(`${SB_URL}/rest/v1/site_config?select=key&limit=1`,{headers:sbH()});
+    hideLoad();
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('cms').classList.add('visible');
+    document.getElementById('sb-url-label').textContent=url.replace('https://','').split('.')[0];
+    initCMS();
+  }catch(e){hideLoad();toast('⚠️ No se pudo conectar: '+e.message,true);}
+}
+function doLogout(){
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('cms').classList.remove('visible');
+}
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let CFG={},CATS=[],PRODS=[],GALLERY=[],ORDERS=[];
+let editingProductId=null,pendingProdImgFile=null,pendingProdImgUrl='';
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+async function initCMS(){
+  showLoad('Cargando datos…');
+  try{
+    const[cfgRows,prods,cats,gals]=await Promise.all([
+      sbSelect('site_config','select=key,value'),
+      sbSelect('products','select=*'),
+      sbSelect('categories','select=*'),
+      sbSelect('gallery','select=*')
+    ]);
+    cfgRows.forEach(r=>CFG[r.key]=r.value);
+    PRODS=prods;CATS=cats;GALLERY=gals;
+    fillAllForms();
+    renderProductsTable();
+    renderCategories();
+    renderGallery();
+    await loadAndRenderOrders();
+    updateStats();
+    hideLoad();
+  }catch(e){hideLoad();toast('⚠️ Error al cargar: '+e.message,true);}
+}
+
+function updateStats(){
+  document.getElementById('stat-products').textContent=PRODS.length;
+  document.getElementById('stat-cats').textContent=CATS.length;
+  document.getElementById('stat-orders').textContent=ORDERS.length;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PANELS
+// ═══════════════════════════════════════════════════════════
+function showPanel(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+  const t={dashboard:'Dashboard',orders:'Pedidos','site-config':'Configuración',hero:'Hero',announcement:'Barra de Anuncio','mid-banner':'Banner',about:'Nosotros',contact:'Contacto',products:'Productos',categories:'Categorías',gallery:'Galería'};
+  document.getElementById('topbar-title').textContent=t[id]||id;
+  if(id==='orders')loadAndRenderOrders();
+}
+
+// ═══════════════════════════════════════════════════════════
+// FILL FORMS
+// ═══════════════════════════════════════════════════════════
+function fillAllForms(){
+  const s=CFG.site||{},h=CFG.hero||{},ann=CFG.announcement||{},mb=CFG.mid_banner||{},ab=CFG.about||{},c=CFG.contact||{};
+  sv('cfg-name',s.name);sv('cfg-phone',s.phone);sv('cfg-facebook',s.facebook);sv('cfg-instagram',s.instagram);sv('cfg-city',s.city);sv('cfg-currency',s.currency);
+  sv('hero-eyebrow',h.eyebrow);sv('hero-title',h.title);sv('hero-desc',h.desc);sv('hero-btn1',h.btn1);sv('hero-btn2',h.btn2);
+  if(h.img_url)showPrev('hero-pw','hero-pi',h.img_url);
+  sv('announce-text',ann.text);
+  if(ann.bg)document.getElementById('announce-bg').value=ann.bg;
+  if(ann.color)document.getElementById('announce-color').value=ann.color;
+  sv('banner-title',mb.title);sv('banner-sub',mb.sub);sv('banner-btn',mb.btn);
+  if(mb.img_url)showPrev('banner-pw','banner-pi',mb.img_url);
+  sv('about-title',ab.title);sv('about-p1',ab.p1);sv('about-p2',ab.p2);
+  if(ab.img_url)showPrev('about-pw','about-pi',ab.img_url);
+  sv('contact-title',c.title);sv('contact-desc',c.desc);sv('contact-wa',c.wa);sv('contact-wa-btn',c.waBtn);
+  if((CFG.logo||{}).img_url)showPrev('logo-pw','logo-pi',CFG.logo.img_url);
+}
+
+// ═══════════════════════════════════════════════════════════
+// SAVE ALL (texts only — images saved immediately on upload)
+// ═══════════════════════════════════════════════════════════
+async function saveAll(){
+  showLoad('Guardando en Supabase…');
+  try{
+    // Save category names from DOM
+    document.querySelectorAll('.cat-name-input').forEach((inp,i)=>{if(CATS[i])CATS[i].name=inp.value;});
+    for(const cat of CATS){
+      await sbUpsert('categories',{id:cat.id,name:cat.name,emoji:cat.emoji,img_url:cat.img_url||'',sort_order:cat.sort_order||0});
+    }
+    const updates=[
+      {key:'site',value:{name:g('cfg-name'),phone:g('cfg-phone'),facebook:g('cfg-facebook'),instagram:g('cfg-instagram'),city:g('cfg-city'),currency:g('cfg-currency')}},
+      {key:'hero',value:{...(CFG.hero||{}),eyebrow:g('hero-eyebrow'),title:g('hero-title'),desc:g('hero-desc'),btn1:g('hero-btn1'),btn2:g('hero-btn2')}},
+      {key:'announcement',value:{text:g('announce-text'),bg:document.getElementById('announce-bg').value,color:document.getElementById('announce-color').value}},
+      {key:'mid_banner',value:{...(CFG.mid_banner||{}),title:g('banner-title'),sub:g('banner-sub'),btn:g('banner-btn')}},
+      {key:'about',value:{...(CFG.about||{}),title:g('about-title'),p1:g('about-p1'),p2:g('about-p2')}},
+      {key:'contact',value:{title:g('contact-title'),desc:g('contact-desc'),wa:g('contact-wa'),waBtn:g('contact-wa-btn')}},
+    ];
+    await sbUpsert('site_config',updates);
+    const cfgRows=await sbSelect('site_config','select=key,value');
+    cfgRows.forEach(r=>CFG[r.key]=r.value);
+    document.getElementById('stat-saved').textContent=new Date().toLocaleTimeString('es-BO');
+    hideLoad();toast('✅ Cambios guardados en Supabase');
+  }catch(e){hideLoad();toast('⚠️ '+e.message,true);}
+}
+
+// ═══════════════════════════════════════════════════════════
+// IMAGE UPLOAD
+// ═══════════════════════════════════════════════════════════
+async function uploadSectionImg(input,key,pwId,piId,inId){
+  const file=input.files[0];if(!file)return;
+  const mb=(file.size/1024/1024).toFixed(1);
+  toast('⏳ Subiendo imagen ('+mb+' MB)…');
+  try{
+    const ext=file.name.split('.').pop().toLowerCase();
+    const url=await sbUpload(`${key}/${key}_${Date.now()}.${ext}`,file);
+    if(!CFG[key])CFG[key]={};
+    CFG[key].img_url=url;
+    await sbUpsert('site_config',[{key,value:CFG[key]}]);
+    showPrev(pwId,piId,url);
+    document.getElementById(inId).textContent='✓ '+file.name+' ('+mb+' MB)';
+    toast('🖼 Imagen subida');
+  }catch(e){toast('⚠️ Error: '+e.message,true);}
+}
+async function removeSectionImg(key,pwId,inId){
+  if(CFG[key])CFG[key].img_url='';
+  await sbUpsert('site_config',[{key,value:CFG[key]||{}}]);
+  document.getElementById(pwId).style.display='none';
+  document.getElementById(inId).textContent='';
+}
+function showPrev(wId,iId,url){const w=document.getElementById(wId),i=document.getElementById(iId);if(w&&i&&url){i.src=url;w.style.display='block';}}
+
+// ═══════════════════════════════════════════════════════════
+// PRODUCTS
+// ═══════════════════════════════════════════════════════════
+function renderProductsTable(filter=''){
+  const tbody=document.getElementById('products-tbody');tbody.innerHTML='';
+  PRODS.filter(p=>p.name.toLowerCase().includes(filter.toLowerCase())||(p.sku||'').toLowerCase().includes(filter.toLowerCase())).forEach(p=>{
+    const cat=CATS.find(c=>c.id===p.cat_id);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><div class="prod-thumb-wrap">
+        ${p.img_url?`<img class="prod-thumb" src="${p.img_url}" alt=""/>`:`<div class="prod-thumb">🛍</div>`}
+        <div><div class="prod-name-col">${p.name}</div><div style="font-size:.73rem;color:var(--muted)">${(p.description||'').substring(0,38)}…</div></div>
+      </div></td>
+      <td><span class="sku-pill">${p.sku||'—'}</span></td>
+      <td>${cat?cat.emoji+' '+cat.name:'—'}</td>
+      <td style="color:var(--rust);font-weight:600">${p.price}</td>
+      <td>${p.status==='active'?'<span class="tbadge badge-active">Activo</span>':'<span class="tbadge badge-draft">Borrador</span>'}
+          ${p.badge?`<span class="tbadge badge-feat" style="margin-left:.3rem">${p.badge}</span>`:''}</td>
+      <td><div class="action-btns">
+        <button class="btn-edit" onclick="editProduct('${p.id}')">✏ Editar</button>
+        <button class="btn-del" onclick="deleteProduct('${p.id}')">🗑</button>
+      </div></td>`;
+    tbody.appendChild(tr);
+  });
+}
+function filterProducts(v){renderProductsTable(v);}
+
+function openProductModal(id=null){
+  editingProductId=id;pendingProdImgFile=null;pendingProdImgUrl='';
+  document.getElementById('modal-title').textContent=id?'Editar Producto':'Nuevo Producto';
+  const sel=document.getElementById('m-cat');sel.innerHTML='<option value="">Sin categoría</option>';
+  CATS.forEach(c=>sel.innerHTML+=`<option value="${c.id}">${c.emoji} ${c.name}</option>`);
+  ['m-name','m-desc','m-price','m-badge','m-sku'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('m-status').value='active';
+  document.getElementById('m-img-wrap').style.display='none';
+  document.getElementById('m-img-name').textContent='';
+  if(id){
+    const p=PRODS.find(x=>x.id===id);
+    if(p){
+      sv('m-name',p.name);sv('m-desc',p.description);sv('m-price',p.price);
+      sv('m-sku',p.sku||'');sv('m-badge',p.badge||'');
+      document.getElementById('m-status').value=p.status;
+      document.getElementById('m-cat').value=p.cat_id||'';
+      if(p.img_url){pendingProdImgUrl=p.img_url;showPrev('m-img-wrap','m-img-preview',p.img_url);}
+    }
+  }
+  document.getElementById('product-modal').classList.add('open');
+}
+function editProduct(id){openProductModal(id);}
+function closeModal(){document.getElementById('product-modal').classList.remove('open');}
+function handleProductImg(input){
+  const file=input.files[0];if(!file)return;
+  pendingProdImgFile=file;
+  const r=new FileReader();r.onload=e=>showPrev('m-img-wrap','m-img-preview',e.target.result);r.readAsDataURL(file);
+  document.getElementById('m-img-name').textContent='✓ '+file.name;
+}
+function clearProductImg(){pendingProdImgFile=null;pendingProdImgUrl='';document.getElementById('m-img-wrap').style.display='none';}
+
+function genSKU(){
+  const nums=PRODS.map(p=>{const m=(p.sku||'').match(/MA-(\d+)/);return m?parseInt(m[1]):0;}).filter(n=>n>0);
+  return 'MA-'+String((nums.length?Math.max(...nums):0)+1).padStart(3,'0');
+}
+
+async function saveProduct(){
+  const name=g('m-name');if(!name){toast('⚠️ El nombre es obligatorio',true);return;}
+  showLoad('Guardando producto…');
+  try{
+    const skuIn=g('m-sku').trim().toUpperCase();
+    const sku=skuIn||(editingProductId?PRODS.find(p=>p.id===editingProductId)?.sku:'')||genSKU();
+    let img_url=pendingProdImgUrl;
+    if(pendingProdImgFile){
+      const ext=pendingProdImgFile.name.split('.').pop().toLowerCase();
+      const pid=editingProductId||('p'+Date.now());
+      img_url=await sbUpload(`products/${pid}.${ext}`,pendingProdImgFile);
+    }
+    const data={
+      id:editingProductId||('p'+Date.now()),sku,name,
+      description:g('m-desc'),price:g('m-price'),
+      cat_id:document.getElementById('m-cat').value||null,
+      status:document.getElementById('m-status').value,
+      badge:g('m-badge'),img_url,
+      sort_order:editingProductId?PRODS.find(p=>p.id===editingProductId)?.sort_order||99:PRODS.length+1
+    };
+    await sbUpsert('products',data);
+    PRODS=await sbSelect('products','select=*');
+    renderProductsTable();updateStats();closeModal();hideLoad();toast('🛍 Producto guardado');
+  }catch(e){hideLoad();toast('⚠️ '+e.message,true);}
+}
+async function deleteProduct(id){
+  if(!confirm('¿Eliminar este producto?'))return;
+  showLoad('Eliminando…');
+  try{
+    await sbDelete('products',id);
+    PRODS=await sbSelect('products','select=*');
+    renderProductsTable();updateStats();hideLoad();toast('🗑 Producto eliminado');
+  }catch(e){hideLoad();toast('⚠️ '+e.message,true);}
+}
+
+// ═══════════════════════════════════════════════════════════
+// CATEGORIES
+// ═══════════════════════════════════════════════════════════
+function renderCategories(){
+  const grid=document.getElementById('cat-grid-admin');grid.innerHTML='';
+  CATS.forEach(c=>{
+    const div=document.createElement('div');div.className='cat-card-admin';
+    div.innerHTML=`
+      <div class="cat-img">${c.emoji||'🎨'}${c.img_url?`<img src="${c.img_url}" alt=""/>`:''}
+      </div>
+      <div class="cat-body">
+        <input class="cat-name-input" value="${c.name}" placeholder="Nombre…"/>
+        <label class="cat-upload-btn">📷 Imagen<input type="file" accept="image/*" onchange="uploadCatImg(this,'${c.id}')"/></label>
+        <button onclick="deleteCategory('${c.id}')" style="margin-left:.4rem;background:none;border:none;color:#e06060;cursor:pointer;font-size:.8rem">🗑</button>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+async function uploadCatImg(input,catId){
+  const file=input.files[0];if(!file)return;
+  toast('⏳ Subiendo imagen de categoría…');
+  try{
+    const ext=file.name.split('.').pop().toLowerCase();
+    const url=await sbUpload(`categories/${catId}.${ext}`,file);
+    const cat=CATS.find(c=>c.id===catId);if(cat)cat.img_url=url;
+    await sbUpsert('categories',{id:catId,img_url:url,name:cat?.name||'',emoji:cat?.emoji||'🎨',sort_order:cat?.sort_order||0});
+    renderCategories();toast('🌸 Imagen actualizada');
+  }catch(e){toast('⚠️ '+e.message,true);}
+}
+async function addCategory(){
+  const id='cat'+Date.now();
+  const cat={id,name:'Nueva Categoría',emoji:'🎨',img_url:'',sort_order:CATS.length+1};
+  await sbUpsert('categories',cat);CATS.push(cat);renderCategories();updateStats();
+}
+async function deleteCategory(id){
+  if(!confirm('¿Eliminar esta categoría?'))return;
+  await sbDelete('categories',id);CATS=CATS.filter(c=>c.id!==id);renderCategories();updateStats();
+}
+
+// ═══════════════════════════════════════════════════════════
+// GALLERY
+// ═══════════════════════════════════════════════════════════
+function renderGallery(){
+  const grid=document.getElementById('gallery-admin-grid');grid.innerHTML='';
+  GALLERY.forEach((gal,i)=>{
+    const div=document.createElement('div');
+    div.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden';
+    div.innerHTML=`
+      <div style="height:150px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden">
+        ${gal.img_url?`<img src="${gal.img_url}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" alt=""/>`:'📷'}
+      </div>
+      <div style="padding:.8rem">
+        <label style="font-size:.72rem;color:var(--muted);display:block;margin-bottom:.3rem">Foto ${i+1}</label>
+        <label class="cat-upload-btn" style="width:100%;display:block;text-align:center">
+          📷 ${gal.img_url?'Cambiar':'Subir'} foto
+          <input type="file" accept="image/*" onchange="uploadGalleryImg(this,'${gal.id}')"/>
+        </label>
+        ${gal.img_url?`<button onclick="removeGalleryImg('${gal.id}')" style="width:100%;margin-top:.4rem;background:none;border:1px solid var(--border);border-radius:6px;color:#e06060;font-size:.75rem;padding:.3rem;cursor:pointer">🗑 Quitar</button>`:''}
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+async function uploadGalleryImg(input,galId){
+  const file=input.files[0];if(!file)return;
+  toast('⏳ Subiendo foto de galería…');
+  try{
+    const ext=file.name.split('.').pop().toLowerCase();
+    const url=await sbUpload(`gallery/${galId}_${Date.now()}.${ext}`,file);
+    const gal=GALLERY.find(g=>g.id===galId);if(gal)gal.img_url=url;
+    await sbUpsert('gallery',{id:galId,img_url:url,alt_text:gal?.alt_text||'Foto',sort_order:gal?.sort_order||0});
+    renderGallery();updateStats();toast('📷 Foto subida');
+  }catch(e){toast('⚠️ '+e.message,true);}
+}
+async function removeGalleryImg(galId){
+  const gal=GALLERY.find(g=>g.id===galId);if(gal)gal.img_url='';
+  await sbUpdate('gallery',galId,{img_url:''});renderGallery();updateStats();
+}
+async function addGallerySlot(){
+  const id='g'+Date.now();
+  const slot={id,img_url:'',alt_text:'Foto '+(GALLERY.length+1),sort_order:GALLERY.length+1};
+  await sbUpsert('gallery',slot);GALLERY.push(slot);renderGallery();
+}
+
+// ═══════════════════════════════════════════════════════════
+// ORDERS
+// ═══════════════════════════════════════════════════════════
+async function loadAndRenderOrders(){
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/orders?select=*&order=created_at.desc&limit=50`,{headers:sbH()});
+    ORDERS=r.ok?await r.json():[];
+    updateStats();
+  }catch(e){ORDERS=[];}
+  renderOrders();
+}
+function renderOrders(){
+  const container=document.getElementById('orders-list');
+  if(!ORDERS.length){
+    container.innerHTML='<p style="color:var(--muted);text-align:center;padding:3rem;font-size:.85rem">Aún no hay pedidos 📦</p>';return;
+  }
+  const SL={pending:'Pendiente',confirmed:'Confirmado',shipped:'Enviado',done:'Entregado',cancelled:'Cancelado'};
+  const SC={pending:'s-pending',confirmed:'s-confirmed',shipped:'s-shipped',done:'s-done',cancelled:'s-cancelled'};
+  container.innerHTML='';
+  ORDERS.forEach(order=>{
+    const items=Array.isArray(order.items)?order.items:[];
+    const date=new Date(order.created_at).toLocaleString('es-BO');
+    const div=document.createElement('div');div.className='order-row';
+    div.innerHTML=`
+      <div class="order-header">
+        <span class="order-id">#${order.id.substring(0,8).toUpperCase()}</span>
+        <span class="order-date">📅 ${date}</span>
+        <span class="order-total">Bs. ${parseFloat(order.total||0).toFixed(2)}</span>
+        <span class="s-badge ${SC[order.status]||'s-pending'}">${SL[order.status]||order.status}</span>
+      </div>
+      <div class="order-items">${items.map(i=>`<span style="background:rgba(74,155,142,.1);border-radius:4px;padding:.1rem .3rem;font-family:monospace;font-size:.7rem;color:var(--teal)">${i.sku||'—'}</span> ${i.name} ×${i.qty} <strong style="color:var(--rust)">${i.price}</strong>`).join(' &nbsp;·&nbsp; ')}</div>
+      ${order.customer_wa?`<div style="font-size:.78rem;color:var(--teal);margin-top:.3rem">📱 ${order.customer_wa}</div>`:''}
+      <div class="order-status">
+        <span style="font-size:.78rem;color:var(--muted)">Estado:</span>
+        <select class="status-select" onchange="updateOrderStatus('${order.id}',this.value)">
+          ${['pending','confirmed','shipped','done','cancelled'].map(s=>`<option value="${s}"${s===order.status?' selected':''}>${SL[s]}</option>`).join('')}
+        </select>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+async function updateOrderStatus(id,status){
+  try{await sbUpdate('orders',id,{status});toast('✅ Estado actualizado');}
+  catch(e){toast('⚠️ '+e.message,true);}
+}
+
+// ═══════════════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════
+function showLoad(msg){document.getElementById('loading-msg').textContent=msg;document.getElementById('loading-overlay').classList.add('show');}
+function hideLoad(){document.getElementById('loading-overlay').classList.remove('show');}
+function toast(msg,err=false){
+  const t=document.getElementById('toast');t.textContent=msg;t.style.background=err?'#c04040':'var(--teal)';
+  t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2800);
+}
+function g(id){return(document.getElementById(id)||{}).value||'';}
+function sv(id,val){const el=document.getElementById(id);if(el&&val!=null)el.value=val;}
+
+// Restore saved creds on load
+(function(){
+  const url=localStorage.getItem('sb_url')||'';
+  const anon=localStorage.getItem('sb_anon')||'';
+  if(url)document.getElementById('sb-url').value=url;
+  if(anon)document.getElementById('sb-anon').value=anon;
+})();
+</script>
+</body>
+</html>
