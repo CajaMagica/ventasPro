@@ -260,7 +260,112 @@ footer strong{color:var(--cream)}
 @media(min-width:768px){
   .hamburger{display:none!important}
 }
+
+/* ── CART CONTACT ── */
+.cart-contact-wrap{padding:.7rem 0 .6rem;border-top:1px solid var(--warm);border-bottom:1px solid var(--warm);margin-bottom:.8rem}
+.cart-contact-label{font-size:.73rem;font-weight:700;color:var(--text);margin-bottom:.5rem;text-align:center}
+.cart-contact-input{width:100%;padding:.55rem .85rem;border:1.5px solid var(--warm);border-radius:8px;font-family:'Lato',sans-serif;font-size:.87rem;color:var(--dark);background:var(--cream);outline:none;transition:border-color .2s;margin-bottom:.3rem}
+.cart-contact-input:focus{border-color:var(--teal)}
+.cart-contact-input.valid{border-color:var(--teal);background:#f0faf8}
+.cart-contact-or{text-align:center;font-size:.72rem;color:var(--sand);font-weight:700;letter-spacing:.08em;margin:.1rem 0}
+.cart-contact-hint{font-size:.72rem;text-align:center;color:var(--sand);margin-top:.3rem;transition:color .2s}
+.cart-contact-hint.ok{color:var(--teal);font-weight:700}
+.btn-checkout:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+/* ── CART CONTACT ── */
+.cart-contact-wrap{padding:.7rem 0 .6rem;border-top:1px solid var(--warm);border-bottom:1px solid var(--warm);margin-bottom:.8rem}
+.cart-contact-label{font-size:.73rem;font-weight:700;color:var(--text);margin-bottom:.5rem;text-align:center}
+.cart-contact-input{width:100%;padding:.55rem .85rem;border:1.5px solid var(--warm);border-radius:8px;font-family:'Lato',sans-serif;font-size:.87rem;color:var(--dark);background:var(--cream);outline:none;transition:border-color .2s;margin-bottom:.3rem}
+.cart-contact-input:focus{border-color:var(--teal)}
+.cart-contact-input.valid{border-color:var(--teal);background:#f0faf8}
+.cart-contact-or{text-align:center;font-size:.72rem;color:var(--sand);font-weight:700;letter-spacing:.08em;margin:.1rem 0}
+.cart-contact-hint{font-size:.72rem;text-align:center;color:var(--sand);margin-top:.3rem;transition:color .2s}
+.cart-contact-hint.ok{color:var(--teal);font-weight:700}
+.btn-checkout:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+
+/* ── CONTACT FORM ── */
+.contact-form-wrap{
+  max-width:600px;margin:2rem auto 0;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;padding:1.8rem 1.5rem;
+  text-align:left;
+}
+.contact-form-wrap h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;color:var(--cream);
+  margin-bottom:1.2rem;text-align:center;
+}
+.cf-row{margin-bottom:1rem}
+.cf-row label{
+  display:block;font-size:.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:rgba(255,255,255,.5);margin-bottom:.35rem;
+}
+.cf-input{
+  width:100%;padding:.65rem .9rem;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:8px;color:var(--cream);
+  font-family:'Lato',sans-serif;font-size:.9rem;
+  outline:none;transition:border-color .2s;
+}
+.cf-input:focus{border-color:var(--teal)}
+.cf-input::placeholder{color:rgba(255,255,255,.3)}
+textarea.cf-input{resize:vertical;min-height:100px;line-height:1.6}
+/* Image upload */
+.cf-file-zone{
+  border:2px dashed rgba(255,255,255,.2);
+  border-radius:10px;padding:1.2rem;
+  text-align:center;cursor:pointer;
+  transition:border-color .2s,background .2s;
+  position:relative;
+}
+.cf-file-zone:hover{border-color:var(--teal);background:rgba(74,155,142,.08)}
+.cf-file-zone input[type=file]{
+  position:absolute;inset:0;opacity:0;
+  cursor:pointer;width:100%;height:100%;
+}
+.cf-file-zone .cz-icon{font-size:1.8rem;margin-bottom:.4rem}
+.cf-file-zone p{font-size:.78rem;color:rgba(255,255,255,.45);margin-top:.3rem}
+.cf-previews{
+  display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem;
+}
+.cf-prev-item{
+  position:relative;width:72px;height:72px;
+  border-radius:8px;overflow:hidden;
+  background:rgba(255,255,255,.08);
+  flex-shrink:0;
+}
+.cf-prev-item img{width:100%;height:100%;object-fit:cover}
+.cf-prev-item button{
+  position:absolute;top:2px;right:2px;
+  background:rgba(0,0,0,.65);border:none;
+  border-radius:50%;width:20px;height:20px;
+  color:#fff;font-size:.65rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.cf-submit{
+  width:100%;padding:.85rem;border:none;
+  background:linear-gradient(135deg,var(--teal),#3a8578);
+  color:#fff;border-radius:50px;
+  font-size:.95rem;font-weight:700;
+  font-family:'Lato',sans-serif;
+  cursor:pointer;transition:opacity .2s,transform .2s;
+  margin-top:.5rem;display:flex;align-items:center;
+  justify-content:center;gap:.5rem;
+}
+.cf-submit:hover{opacity:.88;transform:translateY(-1px)}
+.cf-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.cf-success{
+  text-align:center;padding:1.5rem;
+  color:var(--teal);font-size:.95rem;
+  display:none;
+}
+.cf-success .cs-icon{font-size:2.5rem;display:block;margin-bottom:.5rem}
+.cf-row-2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+@media(max-width:480px){.cf-row-2{grid-template-columns:1fr}}
 </style>
+<script src="config.js" onerror="console.warn('[Config] config.js no encontrado — usando localStorage como fallback')"></script>
 </head>
 <body>
 
@@ -337,7 +442,19 @@ footer strong{color:var(--cream)}
         <span>Subtotal</span>
         <span class="total-val" id="cart-total">Bs. 0</span>
       </div>
-      <button class="btn-checkout" onclick="checkout()">✅ Realizar pedido</button>
+      <!-- Contact info required before checkout -->
+      <div class="cart-contact-wrap">
+        <p class="cart-contact-label">Para realizar tu pedido necesitamos contactarte:</p>
+        <input class="cart-contact-input" id="cart-customer-email" type="email"
+          placeholder="📧 Tu email" oninput="validateCartContact()"/>
+        <div class="cart-contact-or">ó</div>
+        <input class="cart-contact-input" id="cart-customer-phone" type="tel"
+          placeholder="📱 Tu celular / WhatsApp" oninput="validateCartContact()"/>
+        <p class="cart-contact-hint" id="cart-contact-hint">
+          Ingresa tu email o celular para continuar
+        </p>
+      </div>
+      <button class="btn-checkout" id="btn-checkout" onclick="checkout()" disabled>✅ Realizar pedido</button>
       <button class="btn-wa-order" id="cart-wa-order" onclick="orderByWA()">💬 Pedir por WhatsApp</button>
     </div>
   </div>
@@ -424,7 +541,7 @@ footer strong{color:var(--cream)}
 <!-- CONTACT -->
 <section class="contact-section" id="contacto">
   <h2 id="contact-title">¿Lista para tu pieza especial?</h2>
-  <p id="contact-desc">Escríbenos por WhatsApp o síguenos en Facebook e Instagram. ¡Hacemos pedidos personalizados!</p>
+  <p id="contact-desc">Escríbenos por WhatsApp, por correo, o completa el formulario y te respondemos pronto.</p>
   <div class="contact-btns">
     <a id="wa-link" href="https://wa.me/59176852054" target="_blank" class="btn-whatsapp">💬 <span id="wa-btn-text">Contactar por WhatsApp</span></a>
     <a href="#categorias" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3)">Ver Catálogo</a>
@@ -434,6 +551,49 @@ footer strong{color:var(--cream)}
     <a id="ig-link" href="#" target="_blank" class="social-link" aria-label="Instagram">📸</a>
   </div>
   <p style="margin-top:1.4rem;font-size:.75rem;opacity:.4" id="contact-footer">📞 76852054 · @MiArteBolivia</p>
+
+  <!-- CONTACT FORM -->
+  <div class="contact-form-wrap">
+    <h3>✉️ Envíanos un mensaje</h3>
+    <div id="cf-form">
+      <div class="cf-row-2">
+        <div class="cf-row">
+          <label>Nombre</label>
+          <input class="cf-input" id="cf-name" type="text" placeholder="Tu nombre" maxlength="80"/>
+        </div>
+        <div class="cf-row">
+          <label>Email</label>
+          <input class="cf-input" id="cf-email" type="email" placeholder="tu@correo.com"/>
+        </div>
+      </div>
+      <div class="cf-row">
+        <label>Teléfono / WhatsApp (opcional)</label>
+        <input class="cf-input" id="cf-phone" type="tel" placeholder="+591 7XXXXXXX" maxlength="30"/>
+      </div>
+      <div class="cf-row">
+        <label>Mensaje</label>
+        <textarea class="cf-input" id="cf-msg" placeholder="Cuéntanos qué necesitas, para qué ocasión, colores preferidos..." maxlength="2000"></textarea>
+      </div>
+      <div class="cf-row">
+        <label>Imágenes de referencia (opcional — máx. 5)</label>
+        <div class="cf-file-zone" id="cf-dropzone">
+          <input type="file" accept="image/*" multiple id="cf-files" onchange="handleCFImages(this)"/>
+          <div class="cz-icon">📎</div>
+          <div style="font-size:.85rem;color:rgba(255,255,255,.6)">Toca para adjuntar imágenes</div>
+          <p>JPG · PNG · WEBP — máx. 5 MB cada una</p>
+        </div>
+        <div class="cf-previews" id="cf-previews"></div>
+      </div>
+      <button class="cf-submit" id="cf-submit" onclick="submitContactForm()">
+        <span id="cf-submit-text">📨 Enviar mensaje</span>
+      </button>
+    </div>
+    <div class="cf-success" id="cf-success">
+      <span class="cs-icon">✅</span>
+      <strong style="display:block;font-size:1.05rem;color:var(--cream);margin-bottom:.5rem">¡Mensaje enviado!</strong>
+      <span style="color:rgba(255,255,255,.6);font-size:.88rem">Te responderemos pronto. También puedes escribirnos por WhatsApp para respuesta inmediata.</span>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -446,32 +606,55 @@ footer strong{color:var(--cream)}
 
 <script>
 // ═══════════════════════════════════════════════════════
-// SUPABASE CONFIG (set by admin, read from localStorage)
+// SUPABASE CONFIG — lee desde config.js o localStorage
 // ═══════════════════════════════════════════════════════
-const SB_URL=(localStorage.getItem('sb_url')||'').replace(/\/+$/,'');
-const SB_ANON=localStorage.getItem('sb_anon')||'';
+const _CFG = window.__MIARTE_CONFIG__ || {};
 
-function sbH(){return{
-  'apikey':SB_ANON,'Authorization':'Bearer '+SB_ANON,'Content-Type':'application/json'
-};}
+(function(){
+  const urlOk  = _CFG.supabaseUrl  && !_CFG.supabaseUrl.includes('TU-PROYECTO');
+  const anonOk = _CFG.supabaseAnon && !_CFG.supabaseAnon.includes('TU_ANON_KEY') && !_CFG.supabaseAnon.includes('PEGA_TU');
+  console.log('[Config] config.js cargado:', !!window.__MIARTE_CONFIG__);
+  console.log('[Config] URL válida:', urlOk);
+  console.log('[Config] Anon válida:', anonOk);
+  if(!urlOk && !localStorage.getItem('sb_url'))
+    console.warn('[Config] ⚠️ Sin URL de Supabase — edita config.js');
+  if(!anonOk && !localStorage.getItem('sb_anon'))
+    console.warn('[Config] ⚠️ Sin Anon Key — edita config.js');
+})();
 
-async function sbGet(table,query=''){
-  if(!SB_URL||!SB_ANON)return null;
+const SB_URL = (
+  (_CFG.supabaseUrl && !_CFG.supabaseUrl.includes('TU-PROYECTO'))
+    ? _CFG.supabaseUrl
+    : (localStorage.getItem('sb_url') || '')
+).replace(/\/+$/, '');
+
+const SB_ANON = (
+  (_CFG.supabaseAnon && !_CFG.supabaseAnon.includes('TU_ANON_KEY') && !_CFG.supabaseAnon.includes('PEGA_TU'))
+    ? _CFG.supabaseAnon
+    : (localStorage.getItem('sb_anon') || '')
+);
+
+function sbH(){ return { 'apikey': SB_ANON, 'Authorization': 'Bearer '+SB_ANON, 'Content-Type': 'application/json' }; }
+
+async function sbGet(table, query=''){
+  if(!SB_URL || !SB_ANON) return null;
   try{
-    const r=await fetch(`${SB_URL}/rest/v1/${table}?${query}&order=sort_order`,{headers:sbH()});
-    return r.ok?await r.json():null;
-  }catch(e){return null;}
+    const noSort = ['site_config','orders'];
+    const ord = noSort.includes(table) ? '' : '&order=sort_order.asc';
+    const r = await fetch(`${SB_URL}/rest/v1/${table}?${query}${ord}`, { headers: sbH() });
+    if(!r.ok){ console.warn('[sbGet] Error', r.status, table); return null; }
+    return r.json();
+  }catch(e){ console.error('[sbGet]', e); return null; }
 }
 
 // ═══════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════
-let CART=[], WA_NUM='59176852054', ALL_PRODS=[], ACTIVE_FILTER='todos';
+let CART=[], ALL_PRODS=[], ACTIVE_FILTER='todos';
 let CFG={}, CATS=[], GALLERY=[];
-
-// Session ID único por visitante (para identificar pedidos)
-let SESSION_ID=localStorage.getItem('ma_session')||('s'+Date.now()+Math.random().toString(36).slice(2));
-localStorage.setItem('ma_session',SESSION_ID);
+let WA_NUM = (_CFG.whatsapp || '59176852054');
+let SESSION_ID = localStorage.getItem('ma_session') || ('s'+Date.now()+Math.random().toString(36).slice(2));
+localStorage.setItem('ma_session', SESSION_ID);
 
 const DEFAULT_CATS=[
   {id:'cat1',name:'Flores Prensadas',emoji:'🌸'},
@@ -495,24 +678,28 @@ const DEFAULT_PRODS=[
 // ═══════════════════════════════════════════════════════
 async function boot(){
   showSkeleton();
-  const hasSupabase=SB_URL&&SB_ANON;
+  const hasSupabase = SB_URL && SB_ANON;
+  console.log('[Boot] SB_URL:', SB_URL ? SB_URL.substring(0,50)+'…' : '(vacío)');
+  console.log('[Boot] SB_ANON:', SB_ANON ? SB_ANON.substring(0,20)+'…' : '(vacío)');
+  console.log('[Boot] Conectando a Supabase:', hasSupabase);
+
   if(hasSupabase){
-    // Load everything from Supabase in parallel
-    const [cfgRows,prods,cats,gals]=await Promise.all([
+    const [cfgRows,prods,cats,gals] = await Promise.all([
       sbGet('site_config','select=key,value'),
       sbGet('products','select=*&status=eq.active'),
       sbGet('categories','select=*'),
       sbGet('gallery','select=*'),
     ]);
-    if(cfgRows){cfgRows.forEach(r=>CFG[r.key]=r.value);}
-    ALL_PRODS=prods||DEFAULT_PRODS;
-    CATS=cats||DEFAULT_CATS;
-    GALLERY=gals||[];
+    console.log('[Boot] cfgRows:', cfgRows?.length, '| prods:', prods?.length, '| cats:', cats?.length);
+    if(cfgRows) cfgRows.forEach(r => CFG[r.key] = r.value);
+    ALL_PRODS = prods || DEFAULT_PRODS;
+    CATS      = cats  || DEFAULT_CATS;
+    GALLERY   = gals  || [];
     applyConfig();
   } else {
-    // No Supabase config — use defaults
-    ALL_PRODS=DEFAULT_PRODS;
-    CATS=DEFAULT_CATS;
+    console.warn('[Boot] Sin credenciales — usando datos por defecto');
+    ALL_PRODS = DEFAULT_PRODS;
+    CATS      = DEFAULT_CATS;
   }
   hideSkeleton();
   renderCats();
@@ -524,17 +711,16 @@ async function boot(){
 }
 
 // ═══════════════════════════════════════════════════════
-// APPLY CONFIG FROM SUPABASE
+// APPLY CONFIG
 // ═══════════════════════════════════════════════════════
 function applyConfig(){
   const s=CFG.site||{}, ann=CFG.announcement||{};
-  const h=CFG.hero||{}, mb=CFG.mid_banner||{}, c=CFG.contact||{};
-  const about=CFG.about||{};
+  const h=CFG.hero||{}, mb=CFG.mid_banner||{}, c=CFG.contact||{}, about=CFG.about||{};
 
-  if(s.name)setText('footer-name',s.name);
-  if(s.city)setText('footer-city',s.city);
-  if(s.instagram){setText('gallery-sub','@'+s.instagram);$('ig-link').href='https://instagram.com/'+s.instagram;}
-  if(s.facebook)$('fb-link').href='https://facebook.com/'+s.facebook;
+  if(s.name) setText('footer-name', s.name);
+  if(s.city) setText('footer-city', s.city);
+  if(s.instagram){ setText('gallery-sub','@'+s.instagram); $('ig-link').href='https://instagram.com/'+s.instagram; }
+  if(s.facebook) $('fb-link').href='https://facebook.com/'+s.facebook;
 
   const logo=CFG.logo||{};
   if(logo.img_url){
@@ -544,43 +730,40 @@ function applyConfig(){
     $('site-logo').innerHTML='<span>🦋</span> '+ws.map((w,i)=>i===1?`<span class="logo-accent">${w}</span>`:w).join(' ');
   }
 
-  if(ann.text)$('announcement-bar').textContent=ann.text;
-  if(ann.bg)$('announcement-bar').style.background=ann.bg;
-  if(ann.color)$('announcement-bar').style.color=ann.color;
+  if(ann.text){ $('announcement-bar').textContent=ann.text; }
+  if(ann.bg)    $('announcement-bar').style.background=ann.bg;
+  if(ann.color) $('announcement-bar').style.color=ann.color;
 
-  if(h.eyebrow)setText('hero-eyebrow',h.eyebrow);
-  if(h.title)setText('hero-title',h.title);
-  if(h.desc)setText('hero-desc',h.desc);
-  if(h.btn1)setText('hero-btn1',h.btn1);
-  if(h.btn2)setText('hero-btn2',h.btn2);
-  if(h.img_url)showImg('hero-bg-img',h.img_url);
+  if(h.eyebrow) setText('hero-eyebrow',h.eyebrow);
+  if(h.title)   setText('hero-title',h.title);
+  if(h.desc)    setText('hero-desc',h.desc);
+  if(h.btn1)    setText('hero-btn1',h.btn1);
+  if(h.btn2)    setText('hero-btn2',h.btn2);
+  if(h.img_url) showImg('hero-bg-img',h.img_url);
 
-  if(mb.title)setText('banner-title',mb.title);
-  if(mb.sub)setText('banner-sub',mb.sub);
-  if(mb.btn)setText('banner-btn',mb.btn);
-  if(mb.img_url)showImg('banner-bg-img',mb.img_url);
+  if(mb.title)   setText('banner-title',mb.title);
+  if(mb.sub)     setText('banner-sub',mb.sub);
+  if(mb.btn)     setText('banner-btn',mb.btn);
+  if(mb.img_url) showImg('banner-bg-img',mb.img_url);
 
-  if(about.title)setText('about-title',about.title);
-  if(about.p1)setText('about-p1',about.p1);
-  if(about.p2)setText('about-p2',about.p2);
-  if(about.img_url){$('about-img-wrap').innerHTML=`<img src="${about.img_url}" alt="Nosotros"/>`;}
+  if(about.title)   setText('about-title',about.title);
+  if(about.p1)      setText('about-p1',about.p1);
+  if(about.p2)      setText('about-p2',about.p2);
+  if(about.img_url) $('about-img-wrap').innerHTML=`<img src="${about.img_url}" alt="Nosotros"/>`;
 
-  if(c.title)setText('contact-title',c.title);
-  if(c.desc)setText('contact-desc',c.desc);
+  if(c.title) setText('contact-title',c.title);
+  if(c.desc)  setText('contact-desc',c.desc);
   if(c.wa){
-    WA_NUM=c.wa.replace(/\D/g,'');
-    $('wa-link').href='https://wa.me/'+WA_NUM;
+    WA_NUM = c.wa.replace(/\D/g,'');
+    $('wa-link').href = 'https://wa.me/'+WA_NUM;
     setText('contact-footer','📞 '+c.wa+' · @'+(s.instagram||s.facebook||'MiArteBolivia'));
   }
-  if(c.waBtn)setText('wa-btn-text',c.waBtn);
+  if(c.waBtn) setText('wa-btn-text',c.waBtn);
 }
 
-// ═══════════════════════════════════════════════════════
-// SKELETON LOADING
-// ═══════════════════════════════════════════════════════
 function showSkeleton(){
   document.querySelectorAll('.products-grid,.cat-grid,.gallery-grid').forEach(el=>{
-    el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--sand);font-size:.88rem">⏳ Cargando desde Supabase…</div>';
+    el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--sand);font-size:.88rem">⏳ Cargando…</div>';
   });
 }
 function hideSkeleton(){}
@@ -589,10 +772,10 @@ function hideSkeleton(){}
 // CATEGORIES
 // ═══════════════════════════════════════════════════════
 function renderCats(){
-  const grid=$('cat-grid');grid.innerHTML='';
+  const grid=$('cat-grid'); grid.innerHTML='';
   const cats=CATS.length?CATS:DEFAULT_CATS;
   cats.forEach(cat=>{
-    const d=document.createElement('div');d.className='cat-card';
+    const d=document.createElement('div'); d.className='cat-card';
     d.innerHTML=`<div class="cat-img-wrap">${cat.emoji||'🎨'}${cat.img_url?`<img src="${cat.img_url}" alt="${x(cat.name)}" loading="lazy"/>`:''}
     </div><div class="cat-name">${x(cat.name)}</div>`;
     d.addEventListener('click',()=>{ACTIVE_FILTER=cat.id;applyFilter();$('destacados').scrollIntoView({behavior:'smooth'});});
@@ -604,7 +787,7 @@ function renderCats(){
 // FILTER CHIPS
 // ═══════════════════════════════════════════════════════
 function buildChips(){
-  const bar=$('filter-bar');bar.innerHTML='';
+  const bar=$('filter-bar'); bar.innerHTML='';
   bar.appendChild(mkChip('Todos','todos'));
   const cats=CATS.length?CATS:DEFAULT_CATS;
   const used=new Set(ALL_PRODS.map(p=>p.cat_id||p.cat));
@@ -616,7 +799,7 @@ function mkChip(lbl,id){
   b.addEventListener('click',()=>{ACTIVE_FILTER=id;applyFilter();});
   return b;
 }
-function syncChips(){document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active',c.dataset.filter===ACTIVE_FILTER));}
+function syncChips(){ document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active',c.dataset.filter===ACTIVE_FILTER)); }
 function applyFilter(){
   syncChips();
   renderProds(ACTIVE_FILTER==='todos'?ALL_PRODS:ALL_PRODS.filter(p=>(p.cat_id||p.cat)===ACTIVE_FILTER));
@@ -627,20 +810,15 @@ function applyFilter(){
 // ═══════════════════════════════════════════════════════
 function renderProds(list){
   const grid=$('products-grid');
-  setText('prod-count',list.length+' producto'+(list.length!==1?'s':''));
+  setText('prod-count', list.length+' producto'+(list.length!==1?'s':''));
   grid.innerHTML='';
-  if(!list.length){
-    grid.innerHTML=`<div class="no-results"><span class="nr-icon">🔍</span>No hay productos en esta categoría</div>`;
-    return;
-  }
+  if(!list.length){ grid.innerHTML=`<div class="no-results"><span class="nr-icon">🔍</span>No hay productos en esta categoría</div>`; return; }
   list.forEach(p=>{
-    const img=p.img_url||'';
-    const desc=p.description||p.desc||'';
-    const d=document.createElement('div');d.className='product-card';
+    const img=p.img_url||'', desc=p.description||p.desc||'';
+    const d=document.createElement('div'); d.className='product-card';
     d.innerHTML=`
       ${p.badge?`<div class="product-badge">${x(p.badge)}</div>`:''}
-      <div class="product-img">${img?`<img src="${img}" alt="${x(p.name)}" loading="lazy"/>`:'🛍'}
-      </div>
+      <div class="product-img">${img?`<img src="${img}" alt="${x(p.name)}" loading="lazy"/>`:'🛍'}</div>
       <div class="product-info">
         ${p.sku?`<div class="product-sku">${x(p.sku)}</div>`:''}
         <div class="product-name">${x(p.name)}</div>
@@ -650,11 +828,10 @@ function renderProds(list){
           <button class="add-cart">+ Carrito</button>
         </div>
       </div>`;
-    const btn=d.querySelector('.add-cart');
-    btn.addEventListener('click',()=>{
+    d.querySelector('.add-cart').addEventListener('click',function(){
       addToCart(p,img);
-      btn.textContent='✓';btn.style.background='var(--teal)';
-      setTimeout(()=>{btn.textContent='+ Carrito';btn.style.background='';},1500);
+      this.textContent='✓'; this.style.background='var(--teal)';
+      setTimeout(()=>{this.textContent='+ Carrito';this.style.background='';},1500);
     });
     grid.appendChild(d);
   });
@@ -665,49 +842,33 @@ function renderProds(list){
 // ═══════════════════════════════════════════════════════
 function renderGallery(){
   const gals=GALLERY.filter(g=>g.img_url);
-  if(!gals.length)return;
-  const grid=$('gallery-grid');grid.innerHTML='';
+  if(!gals.length) return;
+  const grid=$('gallery-grid'); grid.innerHTML='';
   gals.forEach(g=>{
-    const d=document.createElement('div');d.className='gallery-item';
+    const d=document.createElement('div'); d.className='gallery-item';
     d.innerHTML=`<img src="${g.img_url}" alt="${x(g.alt_text||'Foto')}" loading="lazy"/><div class="gal-overlay">🔍</div>`;
     d.addEventListener('click',()=>openLightbox(g.img_url));
     grid.appendChild(d);
   });
 }
-
-// ═══════════════════════════════════════════════════════
-// ABOUT
-// ═══════════════════════════════════════════════════════
-function renderAbout(){
-  // Already handled in applyConfig
-}
+function renderAbout(){ /* handled in applyConfig */ }
 
 // ═══════════════════════════════════════════════════════
 // SEARCH
 // ═══════════════════════════════════════════════════════
-function openSearch(){
-  $('search-overlay').classList.add('open');
-  setTimeout(()=>$('search-input').focus(),60);
-  doSearch('');
-}
-function closeSearch(){$('search-overlay').classList.remove('open');$('search-input').value='';}
-function handleSOClick(e){if(e.target===$('search-overlay'))closeSearch();}
+function openSearch(){ $('search-overlay').classList.add('open'); setTimeout(()=>$('search-input').focus(),60); doSearch(''); }
+function closeSearch(){ $('search-overlay').classList.remove('open'); $('search-input').value=''; }
+function handleSOClick(e){ if(e.target===$('search-overlay')) closeSearch(); }
 function doSearch(q){
-  const box=$('search-results');
-  const str=q.trim().toLowerCase();
+  const box=$('search-results'), str=q.trim().toLowerCase();
   const pool=ALL_PRODS.length?ALL_PRODS:DEFAULT_PRODS;
-  if(!str){box.innerHTML='<div class="search-empty">Escribe para buscar productos 🌸</div>';return;}
-  const found=pool.filter(p=>
-    p.name.toLowerCase().includes(str)||
-    (p.description||p.desc||'').toLowerCase().includes(str)||
-    (p.price||'').toLowerCase().includes(str)||
-    (p.sku||'').toLowerCase().includes(str)
-  );
-  if(!found.length){box.innerHTML=`<div class="search-empty">Sin resultados para "<strong>${x(q)}</strong>" 😔</div>`;return;}
+  if(!str){ box.innerHTML='<div class="search-empty">Escribe para buscar productos 🌸</div>'; return; }
+  const found=pool.filter(p=>p.name.toLowerCase().includes(str)||(p.description||'').toLowerCase().includes(str)||(p.price||'').toLowerCase().includes(str)||(p.sku||'').toLowerCase().includes(str));
+  if(!found.length){ box.innerHTML=`<div class="search-empty">Sin resultados para "<strong>${x(q)}</strong>" 😔</div>`; return; }
   box.innerHTML='';
   found.forEach(p=>{
     const img=p.img_url||'';
-    const row=document.createElement('div');row.className='search-item';
+    const row=document.createElement('div'); row.className='search-item';
     row.innerHTML=`
       <div class="search-thumb">${img?`<img src="${img}" alt="${x(p.name)}" loading="lazy"/>`:'🛍'}</div>
       <div style="flex:1;min-width:0">
@@ -724,67 +885,52 @@ function doSearch(q){
   });
 }
 function hilite(text,q){
-  const re=new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  const re=new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
   return x(text).replace(re,'<mark style="background:rgba(196,87,42,.18);color:var(--rust);border-radius:3px">$1</mark>');
 }
 
 // ═══════════════════════════════════════════════════════
 // MOBILE NAV
 // ═══════════════════════════════════════════════════════
-function openMobileNav(){$('mobile-nav').classList.add('open');document.body.style.overflow='hidden';}
-function closeMobileNav(){$('mobile-nav').classList.remove('open');document.body.style.overflow='';}
+function openMobileNav(){ $('mobile-nav').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeMobileNav(){ $('mobile-nav').classList.remove('open'); document.body.style.overflow=''; }
 
 // ═══════════════════════════════════════════════════════
 // CART
 // ═══════════════════════════════════════════════════════
 function parsePriceNum(s){
-  var parts=(s||'').match(/[0-9]+/g);
-  if(!parts||!parts.length)return 0;
-  if(parts.length===1)return parseFloat(parts[0]);
-  var last=parts[parts.length-1];
-  if(last.length<=2)return parseFloat(parts.slice(0,-1).join('')+'.'+last);
-  return parseFloat(parts.join(''));
+  var p=(s||'').match(/[0-9]+/g);
+  if(!p||!p.length)return 0;
+  if(p.length===1)return parseFloat(p[0]);
+  var last=p[p.length-1];
+  return last.length<=2?parseFloat(p.slice(0,-1).join('')+'.'+last):parseFloat(p.join(''));
 }
-
 function addToCart(prod,img){
   const ex=CART.find(i=>i.id===prod.id);
   if(ex){ex.qty++;}
-  else CART.push({
-    id:prod.id,sku:prod.sku||'',name:prod.name,
-    price:prod.price,num:parsePriceNum(prod.price),
-    img:img||'',qty:1
-  });
-  saveCart();refreshCartUI();
+  else CART.push({id:prod.id,sku:prod.sku||'',name:prod.name,price:prod.price,num:parsePriceNum(prod.price),img:img||'',qty:1});
+  saveCart(); refreshCartUI();
   showToast('🛒 '+prod.name+' añadido al carrito');
 }
-function changeQty(id,d){
-  const item=CART.find(i=>i.id===id);if(!item)return;
-  item.qty+=d;
-  if(item.qty<=0)CART=CART.filter(i=>i.id!==id);
-  saveCart();refreshCartUI();
-}
-function removeFromCart(id){CART=CART.filter(i=>i.id!==id);saveCart();refreshCartUI();}
-
+function changeQty(id,d){ const item=CART.find(i=>i.id===id); if(!item)return; item.qty+=d; if(item.qty<=0)CART=CART.filter(i=>i.id!==id); saveCart();refreshCartUI(); }
+function removeFromCart(id){ CART=CART.filter(i=>i.id!==id); saveCart();refreshCartUI(); }
 function refreshCartUI(){
-  const totalQty=CART.reduce((s,i)=>s+i.qty,0);
-  const badge=$('cart-badge');
-  badge.textContent=totalQty;badge.style.display=totalQty>0?'flex':'none';
-  $('cart-count-pill').textContent=totalQty;
+  const total=CART.reduce((s,i)=>s+i.qty,0);
+  const badge=$('cart-badge'); badge.textContent=total; badge.style.display=total>0?'flex':'none';
+  $('cart-count-pill').textContent=total;
   renderCartBody();
 }
 function renderCartBody(){
-  const body=$('cart-body'),foot=$('cart-foot');
+  const body=$('cart-body'), foot=$('cart-foot');
   const currency=(CFG.site?.currency)||'Bs.';
   if(!CART.length){
-    body.innerHTML=`<div class="cart-empty">
-      <div class="ce-icon">🛒</div><p>Tu carrito está vacío</p>
-      <a href="#destacados" class="btn btn-rust" onclick="closeCart()" style="font-size:.82rem;padding:.55rem 1.3rem">Ver productos</a>
-    </div>`;
-    foot.style.display='none';return;
+    body.innerHTML=`<div class="cart-empty"><div class="ce-icon">🛒</div><p>Tu carrito está vacío</p>
+      <a href="#destacados" class="btn btn-rust" onclick="closeCart()" style="font-size:.82rem;padding:.55rem 1.3rem">Ver productos</a></div>`;
+    foot.style.display='none'; return;
   }
   body.innerHTML='';
   CART.forEach(item=>{
-    const row=document.createElement('div');row.className='cart-item';
+    const row=document.createElement('div'); row.className='cart-item';
     row.innerHTML=`
       <div class="ci-img">${item.img?`<img src="${item.img}" alt="${x(item.name)}" loading="lazy"/>`:'🛍'}</div>
       <div class="ci-info">
@@ -803,97 +949,213 @@ function renderCartBody(){
     body.appendChild(row);
   });
   const total=CART.reduce((s,i)=>s+(isNaN(i.num)?0:i.num)*(i.qty||1),0);
-  setText('cart-total',currency+' '+total.toFixed(2));
+  setText('cart-total', currency+' '+total.toFixed(2));
   foot.style.display='block';
 }
-function openCart(){renderCartBody();$('cart-drawer').classList.add('open');document.body.style.overflow='hidden';}
-function closeCart(){$('cart-drawer').classList.remove('open');document.body.style.overflow='';}
+function openCart(){ renderCartBody(); $('cart-drawer').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart(){ $('cart-drawer').classList.remove('open'); document.body.style.overflow=''; }
 
-// ── CHECKOUT: save order to Supabase ──────────────────
+function validateCartContact(){
+  const emailEl = document.getElementById('cart-customer-email');
+  const phoneEl = document.getElementById('cart-customer-phone');
+  const hint    = document.getElementById('cart-contact-hint');
+  const btn     = document.getElementById('btn-checkout');
+  if(!emailEl||!phoneEl||!btn) return;
+
+  const email = emailEl.value.trim();
+  const phone = phoneEl.value.trim();
+  const emailOk = email.length>4 && email.includes('@') && email.includes('.');
+  const phoneOk = phone.replace(/\D/g,'').length >= 7;
+  const ok = emailOk || phoneOk;
+
+  emailEl.classList.toggle('valid', emailOk);
+  phoneEl.classList.toggle('valid', phoneOk);
+  btn.disabled = !ok;
+
+  if(ok){
+    hint.textContent = '✓ Listo — puedes realizar tu pedido';
+    hint.classList.add('ok');
+  } else {
+    hint.textContent = 'Ingresa tu email o celular para continuar';
+    hint.classList.remove('ok');
+  }
+}
+
 async function checkout(){
   if(!CART.length)return;
+
+  // Get customer contact
+  const customerEmail = (document.getElementById('cart-customer-email')?.value||'').trim();
+  const customerPhone = (document.getElementById('cart-customer-phone')?.value||'').trim();
+
+  // Double-check validation
+  const emailOk = customerEmail.length>4 && customerEmail.includes('@');
+  const phoneOk = customerPhone.replace(/\D/g,'').length >= 7;
+  if(!emailOk && !phoneOk){
+    showToast('⚠️ Ingresa tu email o celular primero',true);
+    return;
+  }
+
   const currency=(CFG.site?.currency)||'Bs.';
   const total=CART.reduce((s,i)=>s+(isNaN(i.num)?0:i.num)*(i.qty||1),0);
   const order={
     session_id:SESSION_ID,
     items:CART.map(i=>({id:i.id,sku:i.sku,name:i.name,price:i.price,qty:i.qty})),
     total:total.toFixed(2),
-    status:'pending'
+    status:'pending',
+    customer_email: customerEmail,
+    customer_phone: customerPhone,
+    customer_wa: customerPhone || customerEmail
   };
+
   if(SB_URL&&SB_ANON){
     try{
-      await fetch(`${SB_URL}/rest/v1/orders`,{
-        method:'POST',
-        headers:{...sbH(),'Prefer':'return=minimal'},
-        body:JSON.stringify(order)
-      });
+      await fetch(`${SB_URL}/rest/v1/orders`,{method:'POST',headers:{...sbH(),'Prefer':'return=minimal'},body:JSON.stringify(order)});
       showToast('🎉 ¡Pedido registrado! Te contactaremos pronto');
-    }catch(e){showToast('⚠️ Error al registrar pedido',true);}
-  } else {
-    showToast('🎉 ¡Pedido recibido!');
-  }
-  CART=[];saveCart();refreshCartUI();closeCart();
-}
+    }catch(e){ showToast('⚠️ Error al registrar pedido',true); }
+  } else { showToast('🎉 ¡Pedido recibido!'); }
 
+  CART=[]; saveCart(); refreshCartUI(); closeCart();
+
+  // Reset contact fields
+  const e=document.getElementById('cart-customer-email');
+  const p=document.getElementById('cart-customer-phone');
+  if(e)e.value=''; if(p)p.value='';
+  validateCartContact();
+}
 function orderByWA(){
   if(!CART.length)return;
   const currency=(CFG.site?.currency)||'Bs.';
   const total=CART.reduce((s,i)=>s+(isNaN(i.num)?0:i.num)*(i.qty||1),0);
   const lines=CART.map(i=>`• [${i.sku||'—'}] ${i.name} x${i.qty} = ${currency} ${((isNaN(i.num)?0:i.num)*(i.qty||1)).toFixed(2)}`);
   const msg=`Hola! Quiero hacer un pedido:\n\n${lines.join('\n')}\n\n*Total: ${currency} ${total.toFixed(2)}*\n\n¿Está disponible?`;
-  // Also save to Supabase
   if(SB_URL&&SB_ANON){
     const order={session_id:SESSION_ID,items:CART.map(i=>({id:i.id,sku:i.sku,name:i.name,price:i.price,qty:i.qty})),total:total.toFixed(2),status:'pending',customer_wa:'WhatsApp'};
     fetch(`${SB_URL}/rest/v1/orders`,{method:'POST',headers:{...sbH(),'Prefer':'return=minimal'},body:JSON.stringify(order)}).catch(()=>{});
   }
   window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
 }
-
-function saveCart(){try{localStorage.setItem('miarte_cart',JSON.stringify(CART));}catch(e){}}
+function saveCart(){ try{localStorage.setItem('miarte_cart',JSON.stringify(CART));}catch(e){} }
 function loadCart(){
   try{
     const d=localStorage.getItem('miarte_cart');
     if(d){
       CART=JSON.parse(d);
-      CART=CART.map(i=>{
-        const num=parsePriceNum(i.price);
-        const prod=ALL_PRODS.find(p=>p.id===i.id);
-        return {...i,num,qty:Math.max(1,i.qty||1),sku:i.sku||(prod?.sku||prod?.sku)||''};
-      });
+      CART=CART.map(i=>({...i,num:parsePriceNum(i.price),qty:Math.max(1,i.qty||1),sku:i.sku||''}));
       CART=CART.filter(i=>i.num>0);
     }
-  }catch(e){CART=[];}
+  }catch(e){ CART=[]; }
   refreshCartUI();
 }
-function openWA(){window.open('https://wa.me/'+WA_NUM,'_blank');}
+function openWA(){ window.open('https://wa.me/'+WA_NUM,'_blank'); }
 
 // ═══════════════════════════════════════════════════════
 // LIGHTBOX
 // ═══════════════════════════════════════════════════════
-function openLightbox(src){$('lb-img').src=src;$('lightbox').classList.add('open');document.body.style.overflow='hidden';}
-function closeLightbox(){$('lightbox').classList.remove('open');document.body.style.overflow='';}
+function openLightbox(src){ $('lb-img').src=src; $('lightbox').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeLightbox(){ $('lightbox').classList.remove('open'); document.body.style.overflow=''; }
 
 // ═══════════════════════════════════════════════════════
 // KEYBOARD / SCROLL
 // ═══════════════════════════════════════════════════════
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeSearch();closeLightbox();closeCart();closeMobileNav();}
+  if(e.key==='Escape'){ closeSearch();closeLightbox();closeCart();closeMobileNav(); }
 });
-window.addEventListener('scroll',()=>{
-  $('scroll-top').classList.toggle('visible',window.scrollY>380);
-},{passive:true});
+window.addEventListener('scroll',()=>{ $('scroll-top').classList.toggle('visible',window.scrollY>380); },{passive:true});
+
+// ═══════════════════════════════════════════════════════
+// CONTACT FORM
+// ═══════════════════════════════════════════════════════
+let CF_IMAGES=[];
+
+function handleCFImages(input){
+  Array.from(input.files).forEach(file=>{
+    if(CF_IMAGES.length>=5){ showToast('⚠️ Máximo 5 imágenes',true); return; }
+    if(file.size>5*1024*1024){ showToast('⚠️ '+file.name+' supera 5 MB',true); return; }
+    const reader=new FileReader();
+    reader.onload=e=>{ CF_IMAGES.push({file,dataUrl:e.target.result,name:file.name}); renderCFPreviews(); };
+    reader.readAsDataURL(file);
+  });
+  input.value='';
+}
+function renderCFPreviews(){
+  const box=$('cf-previews'); if(!box)return;
+  box.innerHTML='';
+  CF_IMAGES.forEach((img,i)=>{
+    const d=document.createElement('div'); d.className='cf-prev-item';
+    d.innerHTML=`<img src="${img.dataUrl}" alt=""/><button onclick="removeCFImage(${i})" aria-label="Quitar">✕</button>`;
+    box.appendChild(d);
+  });
+}
+function removeCFImage(i){ CF_IMAGES.splice(i,1); renderCFPreviews(); }
+
+async function submitContactForm(){
+  const name =(document.getElementById('cf-name')?.value||'').trim();
+  const email=(document.getElementById('cf-email')?.value||'').trim();
+  const phone=(document.getElementById('cf-phone')?.value||'').trim();
+  const msg  =(document.getElementById('cf-msg')?.value||'').trim();
+  if(!name){ showToast('⚠️ Escribe tu nombre',true); return; }
+  if(!email||!email.includes('@')){ showToast('⚠️ Email inválido',true); return; }
+  if(!msg){ showToast('⚠️ Escribe un mensaje',true); return; }
+  const btn=$('cf-submit'), btxt=$('cf-submit-text');
+  btn.disabled=true; btxt.textContent='⏳ Enviando…';
+  const payload={name,email,phone,message:msg,
+    images:CF_IMAGES.map(i=>({name:i.name,data:i.dataUrl.split(',')[1],type:i.file.type}))};
+  let sent=false, errorMsg='';
+
+  if(!SB_URL||!SB_ANON){
+    errorMsg='Sin conexión a Supabase — configura config.js';
+  } else {
+    try{
+      btxt.textContent='⏳ Conectando…';
+      const res=await fetch(`${SB_URL}/functions/v1/Send-contact-index`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_ANON,'apikey':SB_ANON},
+        body:JSON.stringify(payload)
+      });
+      if(res.ok){
+        sent=true;
+      } else {
+        let errData={};
+        try{ errData=await res.json(); }catch{}
+        errorMsg='Error '+res.status+': '+(errData.error||errData.message||res.statusText);
+        console.error('[send-contact]', res.status, errData);
+      }
+    }catch(e){
+      errorMsg='Error de red: '+e.message;
+      console.error('[send-contact fetch]', e);
+    }
+  }
+
+  if(sent){
+    $('cf-form').style.display='none';
+    $('cf-success').style.display='block';
+    CF_IMAGES=[];
+  } else {
+    btn.disabled=false;
+    btxt.textContent='📨 Enviar mensaje';
+    const existing=$('cf-error-msg');
+    if(existing) existing.remove();
+    const errDiv=document.createElement('div');
+    errDiv.id='cf-error-msg';
+    errDiv.style.cssText='margin-top:.8rem;padding:.8rem 1rem;background:rgba(196,87,42,.15);border:1px solid rgba(196,87,42,.3);border-radius:8px;font-size:.82rem;color:var(--cream);line-height:1.5';
+    errDiv.innerHTML='⚠️ No se pudo enviar el mensaje. '+(errorMsg||'Intenta nuevamente en unos minutos.');
+    $('cf-submit').insertAdjacentElement('afterend', errDiv);
+  }
+}
 
 // ═══════════════════════════════════════════════════════
 // UTILS
 // ═══════════════════════════════════════════════════════
-function $(id){return document.getElementById(id);}
-function setText(id,val){const el=$(id);if(el&&val!==undefined)el.textContent=val;}
-function showImg(id,src){const el=$(id);if(el&&src){el.src=src;el.style.display='block';}}
-function x(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $(id){ return document.getElementById(id); }
+function setText(id,val){ const el=$(id); if(el&&val!==undefined) el.textContent=val; }
+function showImg(id,src){ const el=$(id); if(el&&src){ el.src=src; el.style.display='block'; } }
+function x(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function showToast(msg,err=false){
-  const t=$('toast-msg');t.textContent=msg;
-  t.style.background=err?'#c04040':'var(--teal)';
-  t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2300);
+  const t=$('toast-msg'); if(!t)return;
+  t.textContent=msg; t.style.background=err?'#c04040':'var(--teal)';
+  t.classList.add('show'); clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),2300);
 }
 
 boot();

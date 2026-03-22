@@ -6,7 +6,7 @@
 <title>Mi Arte Bolivia – Panel CMS</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0f0d0a;--surface:#1a1612;--card:#231f1a;--border:#2e2922;--cream:#f5f0e8;--sand:#c9b99a;--clay:#b87c5a;--rust:#c4572a;--teal:#4a9b8e;--text:#e8ddd0;--muted:#7a6f62;--radius:12px;--sidebar:260px}
+:root{--bg:#0f0d0a;--surface:#1a1612;--card:#231f1a;--border:#2e2922;--cream:#f5f0e8;--sand:#c9b99a;--clay:#b87c5a;--rust:#c4572a;--teal:#4a9b8e;--text:#e8ddd0;--muted:#7a6f62;--radius:12px;--sidebar:260px;--sidebar-collapsed:56px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{height:100%}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100%;display:flex;flex-direction:column}
@@ -34,7 +34,60 @@ input,textarea,select{font-family:inherit}
 .login-hint a{color:var(--teal)}
 #cms{display:none;min-height:100vh;flex-direction:row}
 #cms.visible{display:flex}
-aside{width:var(--sidebar);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+aside{width:var(--sidebar);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;transition:width .28s cubic-bezier(.4,0,.2,1)}
+
+/* ── SIDEBAR COLLAPSED ── */
+aside.collapsed{width:var(--sidebar-collapsed)}
+
+/* Hide all text/labels — only icons remain */
+aside.collapsed .sidebar-logo p,
+aside.collapsed .sidebar-logo h2 span:last-child,
+aside.collapsed .sb-badge,
+aside.collapsed .nav-group-title,
+aside.collapsed .nav-item > *:not(.icon),
+aside.collapsed .user-info,
+aside.collapsed .btn-logout{
+  opacity:0;
+  visibility:hidden;
+  width:0;
+  overflow:hidden;
+  white-space:nowrap;
+}
+
+/* Center everything */
+aside.collapsed .sidebar-logo{padding:.9rem .4rem;justify-content:center}
+aside.collapsed .sidebar-logo h2{justify-content:center;font-size:1.2rem;gap:0}
+aside.collapsed .nav-item{padding:.65rem 0;justify-content:center;gap:0}
+aside.collapsed .nav-item .icon{width:var(--sidebar-collapsed);text-align:center;font-size:1.2rem}
+aside.collapsed .sidebar-bottom{padding:.6rem .4rem}
+aside.collapsed .user-chip{justify-content:center;padding:.5rem;gap:0}
+aside.collapsed .nav-group{margin-bottom:0}
+aside.collapsed nav.cms-nav{overflow:visible}
+
+/* Tooltip on hover */
+aside.collapsed .nav-item{position:relative}
+aside.collapsed .nav-item:hover::after{
+  content:attr(data-label);
+  position:fixed;
+  left:calc(var(--sidebar-collapsed) + 6px);
+  background:var(--card);
+  color:var(--cream);
+  font-size:.82rem;
+  font-weight:500;
+  padding:.35rem .85rem;
+  border-radius:8px;
+  white-space:nowrap;
+  border:1px solid var(--border);
+  pointer-events:none;
+  z-index:500;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+#collapse-btn{position:fixed;top:1rem;left:calc(var(--sidebar) - 11px);width:22px;height:22px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:.7rem;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:300;transition:left .28s cubic-bezier(.4,0,.2,1),background .2s,color .2s,transform .28s}
+#collapse-btn:hover{background:var(--rust);color:#fff;border-color:var(--rust)}
+#cms.visible #collapse-btn{display:flex}
+#cms.visible aside.collapsed ~ * #collapse-btn,
+body.sidebar-collapsed #collapse-btn{left:calc(var(--sidebar-collapsed) - 11px);transform:rotate(180deg)}
+#cms{position:relative}
 .sidebar-logo{padding:1.5rem 1.3rem 1rem;border-bottom:1px solid var(--border)}
 .sidebar-logo h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--cream);display:flex;align-items:center;gap:.4rem}
 .sidebar-logo p{font-size:.72rem;color:var(--muted);margin-top:.2rem}
@@ -166,6 +219,7 @@ textarea.cms-input{resize:vertical;min-height:90px;line-height:1.6}
 #toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;background:var(--teal);color:#fff;padding:.7rem 1.4rem;border-radius:10px;font-size:.85rem;font-weight:600;transform:translateY(20px);opacity:0;transition:transform .3s,opacity .3s;pointer-events:none}
 #toast.show{transform:translateY(0);opacity:1}
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 
@@ -198,7 +252,9 @@ textarea.cms-input{resize:vertical;min-height:90px;line-height:1.6}
 </div>
 
 <div id="cms">
-  <aside>
+  <!-- Sidebar toggle button — fixed position, always visible -->
+  <button id="collapse-btn" onclick="toggleSidebar()" title="Colapsar/expandir menú (tecla [)">◀</button>
+  <aside id="sidebar">
     <div class="sidebar-logo">
       <h2>🦋 Mi Arte</h2>
       <p>Content Manager</p>
@@ -207,23 +263,23 @@ textarea.cms-input{resize:vertical;min-height:90px;line-height:1.6}
     <nav class="cms-nav">
       <div class="nav-group">
         <div class="nav-group-title">General</div>
-        <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="icon">📊</span>Dashboard</div>
-        <div class="nav-item" onclick="showPanel('orders',this)"><span class="icon">📦</span>Pedidos</div>
-        <div class="nav-item" onclick="showPanel('site-config',this)"><span class="icon">🌐</span>Configuración</div>
+        <div class="nav-item active" data-label="Dashboard" onclick="showPanel('dashboard',this)"><span class="icon">📊</span>Dashboard</div>
+        <div class="nav-item" data-label="Pedidos" onclick="showPanel('orders',this)"><span class="icon">📦</span>Pedidos</div>
+        <div class="nav-item" data-label="Configuración" onclick="showPanel('site-config',this)"><span class="icon">🌐</span>Configuración</div>
       </div>
       <div class="nav-group">
         <div class="nav-group-title">Secciones</div>
-        <div class="nav-item" onclick="showPanel('hero',this)"><span class="icon">🖼</span>Hero / Portada</div>
-        <div class="nav-item" onclick="showPanel('announcement',this)"><span class="icon">📢</span>Barra de Anuncio</div>
-        <div class="nav-item" onclick="showPanel('mid-banner',this)"><span class="icon">🎯</span>Banner Intermedio</div>
-        <div class="nav-item" onclick="showPanel('about',this)"><span class="icon">💛</span>Nosotros</div>
-        <div class="nav-item" onclick="showPanel('contact',this)"><span class="icon">📞</span>Contacto</div>
+        <div class="nav-item" data-label="Hero / Portada" onclick="showPanel('hero',this)"><span class="icon">🖼</span>Hero / Portada</div>
+        <div class="nav-item" data-label="Barra de Anuncio" onclick="showPanel('announcement',this)"><span class="icon">📢</span>Barra de Anuncio</div>
+        <div class="nav-item" data-label="Banner Intermedio" onclick="showPanel('mid-banner',this)"><span class="icon">🎯</span>Banner Intermedio</div>
+        <div class="nav-item" data-label="Nosotros" onclick="showPanel('about',this)"><span class="icon">💛</span>Nosotros</div>
+        <div class="nav-item" data-label="Contacto" onclick="showPanel('contact',this)"><span class="icon">📞</span>Contacto</div>
       </div>
       <div class="nav-group">
         <div class="nav-group-title">Catálogo</div>
-        <div class="nav-item" onclick="showPanel('products',this)"><span class="icon">🛍</span>Productos</div>
-        <div class="nav-item" onclick="showPanel('categories',this)"><span class="icon">📂</span>Categorías</div>
-        <div class="nav-item" onclick="showPanel('gallery',this)"><span class="icon">📷</span>Galería</div>
+        <div class="nav-item" data-label="Productos" onclick="showPanel('products',this)"><span class="icon">🛍</span>Productos</div>
+        <div class="nav-item" data-label="Categorías" onclick="showPanel('categories',this)"><span class="icon">📂</span>Categorías</div>
+        <div class="nav-item" data-label="Galería" onclick="showPanel('gallery',this)"><span class="icon">📷</span>Galería</div>
       </div>
     </nav>
     <div class="sidebar-bottom">
@@ -485,17 +541,71 @@ textarea.cms-input{resize:vertical;min-height:90px;line-height:1.6}
 <div id="toast"></div>
 
 <script>
+// ── SIDEBAR TOGGLE ──────────────────────────────────────────
+function toggleSidebar(){
+  const aside=document.getElementById('sidebar');
+  const btn=document.getElementById('collapse-btn');
+  const isCollapsed=aside.classList.toggle('collapsed');
+  // Move button to follow sidebar edge
+  if(btn){
+    btn.style.left=isCollapsed
+      ?'calc(var(--sidebar-collapsed) - 11px)'
+      :'calc(var(--sidebar) - 11px)';
+    btn.style.transform=isCollapsed?'rotate(180deg)':'rotate(0deg)';
+  }
+  localStorage.setItem('sb_sidebar_collapsed',isCollapsed?'1':'0');
+}
+function restoreSidebar(){
+  if(localStorage.getItem('sb_sidebar_collapsed')==='1'){
+    const aside=document.getElementById('sidebar');
+    const btn=document.getElementById('collapse-btn');
+    if(aside)aside.classList.add('collapsed');
+    if(btn){
+      btn.style.left='calc(var(--sidebar-collapsed) - 11px)';
+      btn.style.transform='rotate(180deg)';
+    }
+  }
+}
+// Keyboard shortcut: [ key toggles sidebar
+document.addEventListener('keydown',function(e){
+  if(e.key==='['&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
+    toggleSidebar();
+  }
+});
+
 // ═══════════════════════════════════════════════════════════
 // SUPABASE REST CLIENT
 // ═══════════════════════════════════════════════════════════
-const ADMIN_USER='admin', ADMIN_PASS='miarte2025';
-let SB_URL='', SB_ANON='';
+// ── SIDEBAR TOGGLE ─────────────────────────────────────
+// Keyboard shortcut: [ to toggle sidebar
+document.addEventListener('keydown',e=>{
+  if(e.key==='['&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
+    toggleSidebar();
+  }
+});
+
+function toggleSidebar(){
+  const aside=document.getElementById('sidebar');
+  const isCollapsed=aside.classList.toggle('collapsed');
+  localStorage.setItem('sb_sidebar_collapsed', isCollapsed?'1':'0');
+}
+
+
+// Credentials loaded from config.js
+const _CFG = window.__MIARTE_CONFIG__ || {};
+const ADMIN_USER = _CFG.adminUser || 'admin';
+const ADMIN_PASS = _CFG.adminPass || 'miarte2025';
+let SB_URL = (_CFG.supabaseUrl || '').replace(/\/+$/, '');
+let SB_ANON = _CFG.supabaseAnon || '';
 
 function sbH(extra={}){
   return{'apikey':SB_ANON,'Authorization':'Bearer '+SB_ANON,'Content-Type':'application/json','Prefer':'return=representation',...extra};
 }
 async function sbSelect(table,qs=''){
-  const r=await fetch(`${SB_URL}/rest/v1/${table}?${qs}&order=sort_order`,{headers:sbH()});
+  // site_config has no sort_order column — only add order for tables that have it
+  const noSortOrder=['site_config','orders'];
+  const orderClause=noSortOrder.includes(table)?'':'&order=sort_order.asc';
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${qs}${orderClause}`,{headers:sbH()});
   if(!r.ok)throw new Error(await r.text());
   return r.json();
 }
@@ -504,8 +614,9 @@ async function sbUpsert(table,data){
     method:'POST',headers:sbH({'Prefer':'resolution=merge-duplicates,return=representation'}),
     body:JSON.stringify(data)
   });
-  if(!r.ok)throw new Error(await r.text());
-  return r.status===204?[]:r.json();
+  if(!r.ok){const err=await r.text();throw new Error(err);}
+  if(r.status===204||r.headers.get('content-length')==='0')return [];
+  try{return await r.json();}catch{return [];}
 }
 async function sbUpdate(table,id,data,col='id'){
   const r=await fetch(`${SB_URL}/rest/v1/${table}?${col}=eq.${encodeURIComponent(id)}`,{
@@ -520,12 +631,35 @@ async function sbDelete(table,id,col='id'){
   if(!r.ok)throw new Error(await r.text());
 }
 async function sbUpload(path,file){
+  // Supabase Storage: send raw binary with explicit Content-Type
+  // The file object from <input type="file"> has a .type property (e.g. "image/png")
+  const contentType = file.type && file.type!=='' ? file.type : 'image/jpeg';
+
   const r=await fetch(`${SB_URL}/storage/v1/object/miarte/${path}`,{
     method:'POST',
-    headers:{'Authorization':'Bearer '+SB_ANON,'x-upsert':'true'},
+    headers:{
+      'Authorization':'Bearer '+SB_ANON,
+      'apikey':SB_ANON,
+      'x-upsert':'true',
+      'Content-Type':contentType,
+      'Cache-Control':'3600'
+    },
     body:file
   });
-  if(!r.ok)throw new Error(await r.text());
+
+  // Always read response body for debugging
+  const respText=await r.text();
+  let respJson={};
+  try{respJson=JSON.parse(respText);}catch{}
+
+  if(!r.ok){
+    const msg=respJson.message||respJson.error||respText||'Unknown error';
+    console.error('Storage upload failed:',r.status,msg,'path:',path,'type:',contentType);
+    toast('⚠️ Error al subir imagen ('+r.status+'): '+msg,true);
+    throw new Error(msg);
+  }
+
+  // Return the public URL
   return `${SB_URL}/storage/v1/object/public/miarte/${path}`;
 }
 
@@ -533,21 +667,101 @@ async function sbUpload(path,file){
 // AUTH
 // ═══════════════════════════════════════════════════════════
 async function doLogin(){
-  const u=g('user-input'),p=g('pass-input');
-  const url=g('sb-url').replace(/\/+$/,''), anon=g('sb-anon').trim();
-  if(!url||!anon){toast('⚠️ Ingresa URL y Anon Key de Supabase',true);return;}
-  if(u!==ADMIN_USER||p!==ADMIN_PASS){document.getElementById('login-err').style.display='block';return;}
-  SB_URL=url;SB_ANON=anon;
-  localStorage.setItem('sb_url',url);localStorage.setItem('sb_anon',anon);
-  showLoad('Conectando…');
+  // Clear previous errors
+  document.getElementById('login-err').style.display='none';
+
+  const u = g('user-input').trim();
+  const p = g('pass-input');
+
+  // Read credentials: form fields take priority (user just typed them)
+  // then config.js, then localStorage as last resort
+  const _C = window.__MIARTE_CONFIG__ || {};
+  const rawUrl = g('sb-url').trim()
+    || (_C.supabaseUrl && !_C.supabaseUrl.includes('TU-PROYECTO') ? _C.supabaseUrl : '')
+    || localStorage.getItem('sb_url') || '';
+  const rawAnon = g('sb-anon').trim()
+    || (_C.supabaseAnon && !_C.supabaseAnon.includes('TU_ANON_KEY') ? _C.supabaseAnon : '')
+    || localStorage.getItem('sb_anon') || '';
+
+  const url  = rawUrl.replace(/\/+$/, '');
+  const anon = rawAnon;
+
+  // Debug: log what we read
+  console.log('[Login] URL:', url ? url.substring(0,40)+'…' : '(vacío)');
+  console.log('[Login] Anon key:', anon ? anon.substring(0,20)+'…' : '(vacío)');
+  console.log('[Login] User:', u, '| Pass length:', p.length);
+
+  // Validate credentials before trying Supabase
+  if(u !== ADMIN_USER || p !== ADMIN_PASS){
+    document.getElementById('login-err').textContent = 'Usuario o contraseña incorrectos';
+    document.getElementById('login-err').style.display = 'block';
+    console.warn('[Login] Wrong credentials');
+    return;
+  }
+
+  // Validate Supabase config
+  if(!url){
+    document.getElementById('login-err').textContent = '⚠️ Falta la URL de Supabase';
+    document.getElementById('login-err').style.display = 'block';
+    return;
+  }
+  if(!anon){
+    document.getElementById('login-err').textContent = '⚠️ Falta el Anon Key de Supabase';
+    document.getElementById('login-err').style.display = 'block';
+    return;
+  }
+
+  // Set globals
+  SB_URL  = url;
+  SB_ANON = anon;
+  localStorage.setItem('sb_url', url);
+  localStorage.setItem('sb_anon', anon);
+
+  showLoad('Conectando con Supabase…');
+
   try{
-    await fetch(`${SB_URL}/rest/v1/site_config?select=key&limit=1`,{headers:sbH()});
+    console.log('[Login] Testing connection to:', url + '/rest/v1/site_config');
+    const res = await fetch(
+      `${SB_URL}/rest/v1/site_config?select=key&limit=1`,
+      { headers: sbH() }
+    );
+    console.log('[Login] Response status:', res.status);
+
+    if(!res.ok){
+      const errText = await res.text();
+      let errMsg = '';
+      try{ errMsg = JSON.parse(errText).message || errText; }catch{ errMsg = errText; }
+      console.error('[Login] Supabase error:', res.status, errMsg);
+      hideLoad();
+
+      if(res.status === 401){
+        document.getElementById('login-err').textContent = '⚠️ Anon Key inválido (401 Unauthorized)';
+      } else if(res.status === 404){
+        document.getElementById('login-err').textContent = '⚠️ URL incorrecta o tabla no existe (404)';
+      } else {
+        document.getElementById('login-err').textContent = '⚠️ Error ' + res.status + ': ' + errMsg;
+      }
+      document.getElementById('login-err').style.display = 'block';
+      return;
+    }
+
+    // Success
     hideLoad();
-    document.getElementById('login-screen').style.display='none';
+    document.getElementById('login-screen').style.display = 'none';
     document.getElementById('cms').classList.add('visible');
-    document.getElementById('sb-url-label').textContent=url.replace('https://','').split('.')[0];
+    document.getElementById('sb-url-label').textContent =
+      url.replace('https://','').split('.')[0];
+    console.log('[Login] ✅ Connected successfully');
     initCMS();
-  }catch(e){hideLoad();toast('⚠️ No se pudo conectar: '+e.message,true);}
+
+  }catch(e){
+    hideLoad();
+    console.error('[Login] Network error:', e);
+    document.getElementById('login-err').textContent =
+      '⚠️ No se pudo conectar: ' + e.message +
+      '. Verifica que el servidor esté corriendo con servidor-lan.bat';
+    document.getElementById('login-err').style.display = 'block';
+  }
 }
 function doLogout(){
   document.getElementById('login-screen').style.display='flex';
@@ -563,6 +777,31 @@ let editingProductId=null,pendingProdImgFile=null,pendingProdImgUrl='';
 // ═══════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════
+
+
+async function checkBucket(){
+  // The /bucket endpoint requires service_role key — use a public object list instead
+  // Try to list objects in the bucket (works with anon key if bucket is public)
+  try{
+    const r=await fetch(`${SB_URL}/storage/v1/object/list/miarte`,{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+SB_ANON,'apikey':SB_ANON,'Content-Type':'application/json'},
+      body:JSON.stringify({prefix:'',limit:1})
+    });
+    if(r.status===400||r.status===404){
+      const txt=await r.text();
+      console.warn('[Bucket] check failed:',r.status,txt);
+      toast('⚠️ Bucket "miarte" no encontrado o sin permisos. Ve a Supabase → Storage → New bucket → nombre: miarte → activar Public → Save',true);
+      return false;
+    }
+    console.log('[Bucket] check OK, status:',r.status);
+    return true;
+  }catch(e){
+    console.warn('[Bucket] check error:',e);
+    return false;
+  }
+}
+
 async function initCMS(){
   showLoad('Cargando datos…');
   try{
@@ -581,6 +820,8 @@ async function initCMS(){
     await loadAndRenderOrders();
     updateStats();
     hideLoad();
+    // Check bucket in background — show warning if missing
+    checkBucket();
   }catch(e){hideLoad();toast('⚠️ Error al cargar: '+e.message,true);}
 }
 
@@ -887,7 +1128,9 @@ function renderOrders(){
         <span class="s-badge ${SC[order.status]||'s-pending'}">${SL[order.status]||order.status}</span>
       </div>
       <div class="order-items">${items.map(i=>`<span style="background:rgba(74,155,142,.1);border-radius:4px;padding:.1rem .3rem;font-family:monospace;font-size:.7rem;color:var(--teal)">${i.sku||'—'}</span> ${i.name} ×${i.qty} <strong style="color:var(--rust)">${i.price}</strong>`).join(' &nbsp;·&nbsp; ')}</div>
-      ${order.customer_wa?`<div style="font-size:.78rem;color:var(--teal);margin-top:.3rem">📱 ${order.customer_wa}</div>`:''}
+      ${order.customer_email?`<div style="font-size:.78rem;color:var(--teal);margin-top:.3rem">📧 <a href="mailto:${order.customer_email}" style="color:var(--teal)">${order.customer_email}</a></div>`:''}
+      ${order.customer_phone?`<div style="font-size:.78rem;color:var(--teal);margin-top:.2rem">📱 <a href="https://wa.me/${order.customer_phone.replace(/\D/g,'')}" target="_blank" style="color:var(--teal)">${order.customer_phone}</a></div>`:''}
+      ${(!order.customer_email&&!order.customer_phone&&order.customer_wa)?`<div style="font-size:.78rem;color:var(--teal);margin-top:.3rem">📱 ${order.customer_wa}</div>`:''}
       <div class="order-status">
         <span style="font-size:.78rem;color:var(--muted)">Estado:</span>
         <select class="status-select" onchange="updateOrderStatus('${order.id}',this.value)">
@@ -916,10 +1159,50 @@ function sv(id,val){const el=document.getElementById(id);if(el&&val!=null)el.val
 
 // Restore saved creds on load
 (function(){
-  const url=localStorage.getItem('sb_url')||'';
-  const anon=localStorage.getItem('sb_anon')||'';
-  if(url)document.getElementById('sb-url').value=url;
-  if(anon)document.getElementById('sb-anon').value=anon;
+  restoreSidebar();
+  const _C = window.__MIARTE_CONFIG__ || {};
+
+  // Determine best URL and anon key to pre-fill
+  const cfgUrl  = (_C.supabaseUrl  && !_C.supabaseUrl.includes('TU-PROYECTO'))  ? _C.supabaseUrl  : '';
+  const cfgAnon = (_C.supabaseAnon && !_C.supabaseAnon.includes('TU_ANON_KEY')) ? _C.supabaseAnon : '';
+  const lsUrl   = localStorage.getItem('sb_url')  || '';
+  const lsAnon  = localStorage.getItem('sb_anon') || '';
+
+  const url  = cfgUrl  || lsUrl;
+  const anon = cfgAnon || lsAnon;
+  const source = cfgUrl ? 'config.js' : (lsUrl ? 'sesión anterior' : '');
+
+  const sbUrlEl  = document.getElementById('sb-url');
+  const sbAnonEl = document.getElementById('sb-anon');
+
+  // Fill URL field — always editable (never readOnly)
+  if(url && sbUrlEl){
+    sbUrlEl.value = url;
+    sbUrlEl.readOnly = false;
+    sbUrlEl.style.opacity = '1';
+  }
+
+  // Fill Anon key — show masked version but store real value in dataset
+  if(anon && sbAnonEl){
+    // Store real value so doLogin can read it from the field
+    sbAnonEl.value = anon;
+    sbAnonEl.readOnly = false;
+    sbAnonEl.style.opacity = '1';
+    // Mask display but keep value accessible
+    sbAnonEl.type = 'password';
+  }
+
+  // Show source hint
+  if(source){
+    const hint = document.createElement('p');
+    hint.style.cssText = 'font-size:.72rem;color:#4a9b8e;text-align:center;margin-top:.6rem';
+    hint.textContent = '✓ Credenciales pre-cargadas desde ' + source;
+    const box = document.querySelector('.sb-config');
+    if(box) box.appendChild(hint);
+  }
+
+  console.log('[Boot] Config source:', source || 'none');
+  console.log('[Boot] URL found:', !!url, '| Anon found:', !!anon);
 })();
 </script>
 </body>
